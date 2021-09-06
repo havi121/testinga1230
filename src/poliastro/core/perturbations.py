@@ -102,13 +102,13 @@ def atmospheric_drag_exponential(t0, state, k, R, C_D, A_over_m, H0, rho0):
     k : float
         Standard Gravitational parameter (km^3/s^2).
     R : float
-        Radius of the attractor (km)
+        Radius of the attractor (au)
     C_D: float
         Dimensionless drag coefficient ()
     A_over_m: float
         Frontal area/mass of the spacecraft (km^2/kg)
     H0 : float
-        Atmospheric scale height, (km)
+        Atmospheric scale height, (au)
     rho0: float
         Exponent density pre-factor, (kg / km^3)
 
@@ -149,7 +149,7 @@ def atmospheric_drag_model(t0, state, k, R, C_D, A_over_m, model):
     k : float
         Standard Gravitational parameter (km^3/s^2)
     R : float
-        Radius of the attractor (km)
+        Radius of the attractor (au)
     C_D: float
         Dimensionless drag coefficient ()
     A_over_m: float

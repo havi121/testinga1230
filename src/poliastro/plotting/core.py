@@ -150,9 +150,9 @@ class OrbitPlotter3D(_PlotlyOrbitPlotter):
         self._layout = Layout(
             autosize=True,
             scene=dict(
-                xaxis=dict(title="x (km)"),
-                yaxis=dict(title="y (km)"),
-                zaxis=dict(title="z (km)"),
+                xaxis=dict(title="x (au)"),
+                yaxis=dict(title="y (au)"),
+                zaxis=dict(title="z (au)"),
                 aspectmode="data",  # Important!
             ),
         )
@@ -250,8 +250,8 @@ class OrbitPlotter2D(_PlotlyOrbitPlotter, Mixin2D):
         super().__init__(figure, num_points=num_points, plane=plane)
         self._layout = Layout(
             autosize=True,
-            xaxis=dict(title="x (km)", constrain="domain"),
-            yaxis=dict(title="y (km)", scaleanchor="x"),
+            xaxis=dict(title="x (au)", constrain="domain"),
+            yaxis=dict(title="y (au)", scaleanchor="x"),
             shapes=[],
         )
 

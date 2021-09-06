@@ -20,8 +20,8 @@ def test_axes_labels_and_title():
     ss = iss
     op.plot(ss)
 
-    assert ax.get_xlabel() == "$x$ (km)"
-    assert ax.get_ylabel() == "$y$ (km)"
+    assert ax.get_xlabel() == "$x$ (au)"
+    assert ax.get_ylabel() == "$y$ (au)"
 
 
 def test_number_of_lines_for_osculating_orbit():

@@ -52,9 +52,9 @@ class AltitudeCrossEvent(Event):
     Parameters
     ----------
     alt: float
-        Threshold altitude (km).
+        Threshold altitude (au).
     R: float
-        Radius of the attractor (km).
+        Radius of the attractor (au).
     terminal: bool
         Whether to terminate integration if this event occurs.
     direction: float
@@ -84,7 +84,7 @@ class LithobrakeEvent(AltitudeCrossEvent):
     Parameters
     ----------
     R : float
-        Radius of the attractor (km).
+        Radius of the attractor (au).
     terminal: bool
         Whether to terminate integration if this event occurs.
 

@@ -20,7 +20,7 @@ def rv_pqw(k, p, ecc, nu):
     k : float
         Standard gravitational parameter (km^3 / s^2).
     p : float
-        Semi-latus rectum or parameter (km).
+        Semi-latus rectum or parameter (au).
     ecc : float
         Eccentricity.
     nu: float
@@ -95,7 +95,7 @@ def coe2rv(k, p, ecc, inc, raan, argp, nu):
     k : float
         Standard gravitational parameter (km^3 / s^2).
     p : float
-        Semi-latus rectum or parameter (km).
+        Semi-latus rectum or parameter (au).
     ecc : float
         Eccentricity.
     inc : float
@@ -178,7 +178,7 @@ def coe2mee(p, ecc, inc, raan, argp, nu):
     k : float
         Standard gravitational parameter (km^3 / s^2).
     p : float
-        Semi-latus rectum or parameter (km).
+        Semi-latus rectum or parameter (au).
     ecc : float
         Eccentricity.
     inc : float
@@ -239,7 +239,7 @@ def rv2coe(k, r, v, tol=1e-8):
     k : float
         Standard gravitational parameter (km^3 / s^2)
     r : array
-        Position vector (km)
+        Position vector (au)
     v : array
         Velocity vector (km / s)
     tol : float, optional
@@ -248,7 +248,7 @@ def rv2coe(k, r, v, tol=1e-8):
     Returns
     -------
     p : float
-        Semi-latus rectum of parameter (km)
+        Semi-latus rectum of parameter (au)
     ecc: float
         Eccentricity
     inc: float

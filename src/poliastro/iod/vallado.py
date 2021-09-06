@@ -18,9 +18,9 @@ def lambert(k, r0, r, tof, short=True, numiter=35, rtol=1e-8):
     k : ~astropy.units.Quantity
         Gravitational constant of main attractor (km^3 / s^2).
     r0 : ~astropy.units.Quantity
-        Initial position (km).
+        Initial position (au).
     r : ~astropy.units.Quantity
-        Final position (km).
+        Final position (au).
     tof : ~astropy.units.Quantity
         Time of flight (s).
     short : bool, optional

@@ -133,8 +133,8 @@ class StaticOrbitPlotter(BaseOrbitPlotter, Mixin2D):
                 x.to(u.au).value, y.to(u.au).value, linestyle=linestyle, color=colors[0]
             )
 
-        self._ax.set_xlabel("$x$ (km)")
-        self._ax.set_ylabel("$y$ (km)")
+        self._ax.set_xlabel("$x$ (au)")
+        self._ax.set_ylabel("$y$ (au)")
         self._ax.set_aspect(1)
 
         return lines

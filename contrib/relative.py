@@ -461,9 +461,9 @@ class RelativeOrb:
                              label = axOrbR_label)
                 
                 # Set the relative orbit position axes labels.
-                axOrbR.set_xlabel('Hill Frame Cross-Track Axis (km)')
-                axOrbR.set_ylabel('Hill Frame In-Track Axis (km)')
-                axOrbR.set_zlabel('Hill Frame Radial Axis (km)')
+                axOrbR.set_xlabel('Hill Frame Cross-Track Axis (au)')
+                axOrbR.set_ylabel('Hill Frame In-Track Axis (au)')
+                axOrbR.set_zlabel('Hill Frame Radial Axis (au)')
                 
                 # Get the current axes limits on relative orbit plots.
                 axOrbR_axes_limits = [axOrbR.get_xlim()[0],

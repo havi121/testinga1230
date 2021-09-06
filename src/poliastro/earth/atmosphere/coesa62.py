@@ -3,7 +3,7 @@ year-round mean conditions for the range of solar activity that occurs between
 sunspot minimum and sunspot maximum.
 
 +--------+---------+---------+-----------+---------------+---------------+
-| Z (km) |  H (km) |  T (K)  |  p (mbar) | rho (kg / m3) | beta (K / km) |
+| Z (au) |  H (au) |  T (K)  |  p (mbar) | rho (kg / m3) | beta (K / km) |
 +--------+---------+---------+-----------+---------------+---------------+
 |   0.0  |   0.0   | 288.150 | 1.01325e3 |     1.2250    |      -6.5     |
 +--------+---------+---------+-----------+---------------+---------------+
