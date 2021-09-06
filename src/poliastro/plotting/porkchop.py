@@ -82,10 +82,10 @@ def _targetting(departure_body, target_body, t_launch, t_arrival):
         c3_arrival = dv_arr ** 2
 
         return (
-            dv_dpt.to(u.km / u.s).value,
-            dv_arr.to(u.km / u.s).value,
-            c3_launch.to(u.km ** 2 / u.s ** 2).value,
-            c3_arrival.to(u.km ** 2 / u.s ** 2).value,
+            dv_dpt.to(u.au / u.s).value,
+            dv_arr.to(u.au / u.s).value,
+            c3_launch.to(u.au ** 2 / u.s ** 2).value,
+            c3_arrival.to(u.au ** 2 / u.s ** 2).value,
             tof.jd,
         )
 
@@ -138,8 +138,8 @@ class PorkchopPlotter:
         ax=None,
         tfl=True,
         vhp=True,
-        max_c3=45.0 * u.km ** 2 / u.s ** 2,
-        max_vhp=5 * u.km / u.s,
+        max_c3=45.0 * u.au ** 2 / u.s ** 2,
+        max_vhp=5 * u.au / u.s,
     ):
         self.departure_body = departure_body
         self.target_body = target_body
@@ -193,7 +193,7 @@ class PorkchopPlotter:
         else:
             fig = self.ax.figure
 
-        c3_levels = np.linspace(0, self.max_c3.to(u.km ** 2 / u.s ** 2).value, 30)
+        c3_levels = np.linspace(0, self.max_c3.to(u.au ** 2 / u.s ** 2).value, 30)
 
         c = self.ax.contourf(
             [D.to_datetime() for D in self.launch_span],
@@ -233,7 +233,7 @@ class PorkchopPlotter:
 
         if self.vhp:
 
-            vhp_levels = np.linspace(0, self.max_vhp.to(u.km / u.s).value, 5)
+            vhp_levels = np.linspace(0, self.max_vhp.to(u.au / u.s).value, 5)
 
             vhp_contour = self.ax.contour(
                 [D.to_datetime() for D in self.launch_span],
@@ -268,9 +268,9 @@ class PorkchopPlotter:
         self.ax.set_ylabel("Arrival date", fontsize=10, fontweight="bold")
 
         return (
-            dv_launch * u.km / u.s,
-            dv_arrival * u.km / u.s,
-            c3_launch * u.km ** 2 / u.s ** 2,
-            c3_arrival * u.km ** 2 / u.s ** 2,
+            dv_launch * u.au / u.s,
+            dv_arrival * u.au / u.s,
+            c3_launch * u.au ** 2 / u.s ** 2,
+            c3_arrival * u.au ** 2 / u.s ** 2,
             tof * u.d,
         )

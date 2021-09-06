@@ -4,10 +4,10 @@ from poliastro.core.flybys import compute_flyby as compute_flyby_fast
 
 
 @u.quantity_input(
-    v_spacecraft=u.km / u.s,
-    v_body=u.km / u.s,
-    k=u.km ** 3 / u.s ** 2,
-    r_p=u.km,
+    v_spacecraft=u.au / u.s,
+    v_body=u.au / u.s,
+    k=u.au ** 3 / u.s ** 2,
+    r_p=u.au,
     theta=u.deg,
 )
 def compute_flyby(v_spacecraft, v_body, k, r_p, theta=0 * u.deg):
@@ -34,12 +34,12 @@ def compute_flyby(v_spacecraft, v_body, k, r_p, theta=0 * u.deg):
         Turn angle.
 
     """
-    v_spacecraft = v_spacecraft.to(u.km / u.s).value
-    v_body = v_body.to(u.km / u.s).value
-    k = k.to(u.km ** 3 / u.s ** 2).value
-    r_p = r_p.to(u.km).value
+    v_spacecraft = v_spacecraft.to(u.au / u.s).value
+    v_body = v_body.to(u.au / u.s).value
+    k = k.to(u.au ** 3 / u.s ** 2).value
+    r_p = r_p.to(u.au).value
     theta = theta.to(u.rad).value
 
     v_spacecraft_out, delta = compute_flyby_fast(v_spacecraft, v_body, k, r_p, theta)
 
-    return v_spacecraft_out * u.km / u.s, delta * u.rad
+    return v_spacecraft_out * u.au / u.s, delta * u.rad

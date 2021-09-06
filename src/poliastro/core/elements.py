@@ -317,7 +317,7 @@ def rv2coe(k, r, v, tol=1e-8):
     --------
     >>> from poliastro.bodies import Earth
     >>> from astropy import units as u
-    >>> k = Earth.k.to_value(u.km ** 3 / u.s ** 2)
+    >>> k = Earth.k.to_value(u.au ** 3 / u.s ** 2)
     >>> r = np.array([-6045., -3490., 2500.])
     >>> v = np.array([-3.457, 6.618, 2.533])
     >>> p, ecc, inc, raan, argp, nu = rv2coe(k, r, v)

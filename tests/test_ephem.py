@@ -203,7 +203,7 @@ def test_ephem_from_body_has_expected_properties(method, plane, FrameClass, rtol
             (-1.4925067e08, 9130104.71634121, 3964948.59999307),
             (-1.46952333e08, -27413113.24215863, -11875983.21773582),
         ]
-        * u.km,
+        * u.au,
         xyz_axis=1,
         differentials=CartesianDifferential(
             [
@@ -211,7 +211,7 @@ def test_ephem_from_body_has_expected_properties(method, plane, FrameClass, rtol
                 (-2.28639444, -27.3906416, -11.87218591),
                 (5.67814544, -26.84316701, -11.63720607),
             ]
-            * (u.km / u.s),
+            * (u.au / u.s),
             xyz_axis=1,
         ),
     )
@@ -328,8 +328,8 @@ def test_from_horizons_scalar_epoch_uses_reshaped_epochs(horizons_mock):
 
 
 def test_from_orbit_scalar_epoch_uses_reshaped_epochs():
-    r = [-6045, -3490, 2500] * u.km
-    v = [-3.457, 6.618, 2.533] * u.km / u.s
+    r = [-6045, -3490, 2500] * u.au
+    v = [-3.457, 6.618, 2.533] * u.au / u.s
     orb = Orbit.from_vectors(Earth, r, v)
     expected_epochs = Time(["2020-01-02 12:00:00"])
     epochs = expected_epochs[0]
@@ -358,7 +358,7 @@ def test_from_orbit_has_desired_properties(method, rtol):
             (201.42480053, -1978.64139325, -287.25776291),
             (-1084.94556884, -1713.5357774, 3298.72284309),
         ]
-        * u.km,
+        * u.au,
         xyz_axis=1,
         differentials=CartesianDifferential(
             [
@@ -367,13 +367,13 @@ def test_from_orbit_has_desired_properties(method, rtol):
                 (-3.46999908, -10.04899184, 11.19715233),
                 (-1.46069855, 5.88696886, 3.28112281),
             ]
-            * (u.km / u.s),
+            * (u.au / u.s),
             xyz_axis=1,
         ),
     )
 
-    r = [-1000, -2000, 3100] * u.km
-    v = [-1.836, 5.218, 4.433] * u.km / u.s
+    r = [-1000, -2000, 3100] * u.au
+    v = [-1.836, 5.218, 4.433] * u.au / u.s
     orb = Orbit.from_vectors(Earth, r, v)
 
     unused_plane = Planes.EARTH_EQUATOR

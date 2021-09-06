@@ -62,5 +62,5 @@ frame.plot_body_orbit(Mars, EPOCH)
 
 frame.plot_ephem(roadster, EPOCH, label="SpaceX Roadster", color="black")
 
-frame.set_view(45 * u.deg, -120 * u.deg, 4 * u.km)
+frame.set_view(45 * u.deg, -120 * u.deg, 4 * u.au)
 ```

@@ -131,7 +131,7 @@ class RelativeOrb:
         self.satD = satD
         
         # Retrieve the angular orbit parameters from the chief and deputy.
-        aD, aC = satD.a,    satC.a      # Semi-major axis    (u.km)
+        aD, aC = satD.a,    satC.a      # Semi-major axis    (u.au)
         iD, iC = satD.inc,  satC.inc    # Inclination        (u.rad)
         eD, eC = satD.ecc,  satC.ecc    # Eccentricity       (u.one)
         wD, wC = satD.argp, satC.argp   # Arg of Periapsis   (u.rad)
@@ -155,8 +155,8 @@ class RelativeOrb:
                   [          0.0,          0.0,    self.ix,    self.iy ]]
         
         # Finally, define the output of the relative trajectory propagation.
-        self.relPosArray = np.array([]).astype( type(1*u.km) )
-        self.relVelArray = np.array([]).astype( type(1*u.km/u.s) )
+        self.relPosArray = np.array([]).astype( type(1*u.au) )
+        self.relVelArray = np.array([]).astype( type(1*u.au/u.s) )
     
     # Method to return a list of the computed eccentricity vector separation.
     def get_eccentricity_separation(self):
@@ -232,7 +232,7 @@ class RelativeOrb:
         
         """
         Inputs: Keplerian elements and gravitational constant (Astropy units).
-                - a        -> Semi-major axis (u.km)
+                - a        -> Semi-major axis (u.au)
                 - e        -> Eccentricity (u.one)
                 - i        -> Inclination (u.deg)
                 - w        -> Argument of Perigee (u.deg)
@@ -241,13 +241,13 @@ class RelativeOrb:
                 - mu       -> Gravitational constant (u.m^3 / u.s^2)
         
         Output: Inertial position vector, velocity vector, and true anomaly
-                - pos      -> inertial position (1x3 vector, u.km)
-                - vel      -> inertial velocity (1x3 vector, u.km/u.s)
+                - pos      -> inertial position (1x3 vector, u.au)
+                - vel      -> inertial velocity (1x3 vector, u.au/u.s)
                 - trueAnom -> true anomaly (float, u.rad)
         """
         
         # Ensure the conversion of the attractor's gravitational constant.
-        mu = mu.to(u.km**3/u.s**2)
+        mu = mu.to(u.au**3/u.s**2)
         
         # The general flow of the program, is to first solve for the radial
         # position and velocity (in the inertial frame) via Kepler's equation.
@@ -287,18 +287,18 @@ class RelativeOrb:
         # For the matrix multiplication below, we will 
         
         # With the hill frame, we can now convert it to the ECI frame.
-        pos = np.matmul(DCM_NH, np.array([ pos_X.to_value(u.km),
-                                           pos_Y.to_value(u.km),
+        pos = np.matmul(DCM_NH, np.array([ pos_X.to_value(u.au),
+                                           pos_Y.to_value(u.au),
                                            0.0 ]))
-        vel = np.matmul(DCM_NH, np.array([ vel_X.to_value(u.km/u.s),
-                                           vel_Y.to_value(u.km/u.s),
+        vel = np.matmul(DCM_NH, np.array([ vel_X.to_value(u.au/u.s),
+                                           vel_Y.to_value(u.au/u.s),
                                            0.0 ]))
         
         # Finally, let us not forget to compute the true anomaly.
-        trueAnom = np.arctan2( pos_Y.to_value(u.km), pos_X.to_value(u.km) ) 
+        trueAnom = np.arctan2( pos_Y.to_value(u.au), pos_X.to_value(u.au) ) 
         
         # Position vector 1x3 (m), velocity vetor 1x3 (m), true anomaly (rad)
-        return pos * u.km, vel * (u.km/u.s), trueAnom * u.rad
+        return pos * u.au, vel * (u.au/u.s), trueAnom * u.rad
         
     # Propagate method, that must be called in order to store values for plots.
     def propagate(self, duration=43200, step=60):
@@ -336,8 +336,8 @@ class RelativeOrb:
             relPosArrayX, relPosArrayY, relPosArrayZ = [], [], []
             relVelArrayX, relVelArrayY, relVelArrayZ = [], [], []
             
-            # Get the gravitational constant in u.km**3 / u.s**2
-            mu = self.satC.attractor.k.to( u.km**3 / u.s**2 )
+            # Get the gravitational constant in u.au**3 / u.s**2
+            mu = self.satC.attractor.k.to( u.au**3 / u.s**2 )
             
             # Initialise pi in terms of astropy units
             pi = np.pi * 1 * u.rad
@@ -405,22 +405,22 @@ class RelativeOrb:
                 relVel = np.matmul( self.M[3:], uVect )
                 
                 # Un-normalize the relative position vectors
-                relPosArrayX.append( (relPos[0] * self.satC.a).to_value(u.km) )
-                relPosArrayY.append( (relPos[1] * self.satC.a).to_value(u.km) )
-                relPosArrayZ.append( (relPos[2] * self.satC.a).to_value(u.km) )
+                relPosArrayX.append( (relPos[0] * self.satC.a).to_value(u.au) )
+                relPosArrayY.append( (relPos[1] * self.satC.a).to_value(u.au) )
+                relPosArrayZ.append( (relPos[2] * self.satC.a).to_value(u.au) )
                 
                 # Un-normalize the relative velocity vectors
-                relVelArrayX.append( (relVel[0] * vCMag).to_value(u.km/u.s) )
-                relVelArrayY.append( (relVel[1] * vCMag).to_value(u.km/u.s) )
-                relVelArrayZ.append( (relVel[2] * vCMag).to_value(u.km/u.s) )
+                relVelArrayX.append( (relVel[0] * vCMag).to_value(u.au/u.s) )
+                relVelArrayY.append( (relVel[1] * vCMag).to_value(u.au/u.s) )
+                relVelArrayZ.append( (relVel[2] * vCMag).to_value(u.au/u.s) )
             
             # Save the entire relativeEphem matrix.
-            self.relPosArrayX = np.array(relPosArrayX) * ( 1 * u.km )
-            self.relPosArrayY = np.array(relPosArrayY) * ( 1 * u.km )
-            self.relPosArrayZ = np.array(relPosArrayZ) * (-1 * u.km )
-            self.relVelArrayX = np.array(relVelArrayX) * ( 1 * u.km / u.s )
-            self.relVelArrayY = np.array(relVelArrayY) * ( 1 * u.km / u.s )
-            self.relVelArrayZ = np.array(relVelArrayZ) * (-1 * u.km / u.s )
+            self.relPosArrayX = np.array(relPosArrayX) * ( 1 * u.au )
+            self.relPosArrayY = np.array(relPosArrayY) * ( 1 * u.au )
+            self.relPosArrayZ = np.array(relPosArrayZ) * (-1 * u.au )
+            self.relVelArrayX = np.array(relVelArrayX) * ( 1 * u.au / u.s )
+            self.relVelArrayY = np.array(relVelArrayY) * ( 1 * u.au / u.s )
+            self.relVelArrayZ = np.array(relVelArrayZ) * (-1 * u.au / u.s )
             
             # To allow for chaining...
             return self
@@ -582,7 +582,7 @@ if __name__ == "__main__":
 
     # Initialize an example Satellite A as the chief spacecraft.
     satC = Orbit.from_classical( attractor = Earth,
-                                 a         = 6918.140 * u.km,
+                                 a         = 6918.140 * u.au,
                                  ecc       = 1e-6     * u.one,
                                  inc       = 10.0     * u.deg,
                                  raan      = 70.0     * u.deg,
@@ -591,7 +591,7 @@ if __name__ == "__main__":
     
     # Initialize an example Satellite B as the deputy spacecraft.
     satD = Orbit.from_classical( attractor = Earth,
-                                 a         = 6918.140 * u.km,
+                                 a         = 6918.140 * u.au,
                                  ecc       = 0.012    * u.one,
                                  inc       = 11.4     * u.deg,
                                  raan      = 72.35    * u.deg,

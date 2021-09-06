@@ -69,7 +69,7 @@ def build_ephem_interpolant(body, period, t_span, rtol=1e-5):
             .represent_as(CartesianRepresentation)
         )
 
-        r_values[i] = r.xyz.to(u.km)
+        r_values[i] = r.xyz.to(u.au)
 
     t_values = ((t_values - t_span[0]) * u.day).to(u.s).value
     return interp1d(t_values, r_values, kind="cubic", axis=0, assume_sorted=True)

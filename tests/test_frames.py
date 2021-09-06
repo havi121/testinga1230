@@ -84,7 +84,7 @@ def test_planetary_frames_have_proper_string_representations(body, frame):
 def test_planetary_icrs_frame_is_just_translation(body, frame):
     with solar_system_ephemeris.set("builtin"):
         epoch = J2000
-        vector = CartesianRepresentation(x=100 * u.km, y=100 * u.km, z=100 * u.km)
+        vector = CartesianRepresentation(x=100 * u.au, y=100 * u.au, z=100 * u.au)
         vector_result = (
             frame(vector, obstime=epoch)
             .transform_to(ICRS())
@@ -121,7 +121,7 @@ def test_icrs_body_position_to_planetary_frame_yields_zeros(body, frame):
             .represent_as(CartesianRepresentation)
         )
 
-    assert_quantity_allclose(vector_result.xyz, [0, 0, 0] * u.km, atol=1e-7 * u.km)
+    assert_quantity_allclose(vector_result.xyz, [0, 0, 0] * u.au, atol=1e-7 * u.au)
 
 
 @pytest.mark.parametrize(
@@ -146,10 +146,10 @@ def test_planetary_fixed_inertial_conversion(body, fixed_frame, inertial_frame):
         )
         inertial_position = fixed_position.transform_to(inertial_frame(obstime=epoch))
         assert_quantity_allclose(
-            fixed_position.spherical.distance, body.R, atol=1e-7 * u.km
+            fixed_position.spherical.distance, body.R, atol=1e-7 * u.au
         )
         assert_quantity_allclose(
-            inertial_position.spherical.distance, body.R, atol=1e-7 * u.km
+            inertial_position.spherical.distance, body.R, atol=1e-7 * u.au
         )
 
 
@@ -175,10 +175,10 @@ def test_planetary_inertial_fixed_conversion(body, fixed_frame, inertial_frame):
         )
         fixed_position = inertial_position.transform_to(fixed_frame(obstime=epoch))
         assert_quantity_allclose(
-            fixed_position.spherical.distance, body.R, atol=1e-7 * u.km
+            fixed_position.spherical.distance, body.R, atol=1e-7 * u.au
         )
         assert_quantity_allclose(
-            inertial_position.spherical.distance, body.R, atol=1e-7 * u.km
+            inertial_position.spherical.distance, body.R, atol=1e-7 * u.au
         )
 
 
@@ -216,12 +216,12 @@ def test_planetary_inertial_roundtrip_vector(body, fixed_frame, inertial_frame):
         assert_quantity_allclose(
             fixed_position.cartesian.xyz,
             fixed_position_roundtrip.cartesian.xyz,
-            atol=1e-7 * u.km,
+            atol=1e-7 * u.au,
         )
 
 
 def test_round_trip_from_GeocentricSolarEcliptic_gives_same_results():
-    gcrs = GCRS(ra="02h31m49.09s", dec="+89d15m50.8s", distance=200 * u.km)
+    gcrs = GCRS(ra="02h31m49.09s", dec="+89d15m50.8s", distance=200 * u.au)
     gse = gcrs.transform_to(GeocentricSolarEcliptic(obstime=Time("J2000")))
     gcrs_back = gse.transform_to(GCRS(obstime=Time("J2000")))
     assert_quantity_allclose(gcrs_back.dec.value, gcrs.dec.value, atol=1e-7)
@@ -229,7 +229,7 @@ def test_round_trip_from_GeocentricSolarEcliptic_gives_same_results():
 
 
 def test_GeocentricSolarEcliptic_against_data():
-    gcrs = GCRS(ra="02h31m49.09s", dec="+89d15m50.8s", distance=200 * u.km)
+    gcrs = GCRS(ra="02h31m49.09s", dec="+89d15m50.8s", distance=200 * u.au)
     gse = gcrs.transform_to(GeocentricSolarEcliptic(obstime=J2000))
     lon = 233.11691362602866
     lat = 48.64606410986667
@@ -239,7 +239,7 @@ def test_GeocentricSolarEcliptic_against_data():
 
 def test_GeocentricSolarEcliptic_raises_error_nonscalar_obstime():
     with pytest.raises(ValueError) as excinfo:
-        gcrs = GCRS(ra="02h31m49.09s", dec="+89d15m50.8s", distance=200 * u.km)
+        gcrs = GCRS(ra="02h31m49.09s", dec="+89d15m50.8s", distance=200 * u.au)
         gcrs.transform_to(GeocentricSolarEcliptic(obstime=Time(["J3200", "J2000"])))
     assert (
         "To perform this transformation the "

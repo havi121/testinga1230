@@ -33,24 +33,24 @@ def test_J2_propagation_Earth():
     r0 = np.array([-2384.46, 5729.01, 3050.46])  # km
     v0 = np.array([-7.36138, -2.98997, 1.64354])  # km/s
 
-    orbit = Orbit.from_vectors(Earth, r0 * u.km, v0 * u.km / u.s)
+    orbit = Orbit.from_vectors(Earth, r0 * u.au, v0 * u.au / u.s)
 
     tofs = [48.0] * u.h
 
     def f(t0, u_, k):
         du_kep = func_twobody(t0, u_, k)
         ax, ay, az = J2_perturbation(
-            t0, u_, k, J2=Earth.J2.value, R=Earth.R.to(u.km).value
+            t0, u_, k, J2=Earth.J2.value, R=Earth.R.to(u.au).value
         )
         du_ad = np.array([0, 0, 0, ax, ay, az])
         return du_kep + du_ad
 
     rr, vv = cowell(Earth.k, orbit.r, orbit.v, tofs, f=f)
 
-    k = Earth.k.to(u.km ** 3 / u.s ** 2).value
+    k = Earth.k.to(u.au ** 3 / u.s ** 2).value
 
     _, _, _, raan0, argp0, _ = rv2coe(k, r0, v0)
-    _, _, _, raan, argp, _ = rv2coe(k, rr[0].to(u.km).value, vv[0].to(u.km / u.s).value)
+    _, _, _, raan, argp, _ = rv2coe(k, rr[0].to(u.au).value, vv[0].to(u.au / u.s).value)
 
     raan_variation_rate = (raan - raan0) / tofs[0].to(u.s).value  # type: ignore
     argp_variation_rate = (argp - argp0) / tofs[0].to(u.s).value  # type: ignore
@@ -96,14 +96,14 @@ def test_J3_propagation_Earth(test_params):
     # Nai-ming Qi, Qilong Sun, Yong Yang, (2018) "Effect of J3 perturbation on satellite position in LEO",
     # Aircraft Engineering and  Aerospace Technology, Vol. 90 Issue: 1,
     # pp.74-86, https://doi.org/10.1108/AEAT-03-2015-0092
-    a_ini = 8970.667 * u.km
+    a_ini = 8970.667 * u.au
     ecc_ini = 0.25 * u.one
     raan_ini = 1.047 * u.rad
     nu_ini = 0.0 * u.rad
     argp_ini = 1.0 * u.rad
     inc_ini = test_params["inc"]
 
-    k = Earth.k.to(u.km ** 3 / u.s ** 2).value
+    k = Earth.k.to(u.au ** 3 / u.s ** 2).value
 
     orbit = Orbit.from_classical(
         Earth, a_ini, ecc_ini, inc_ini, raan_ini, argp_ini, nu_ini
@@ -112,7 +112,7 @@ def test_J3_propagation_Earth(test_params):
     def f(t0, u_, k):
         du_kep = func_twobody(t0, u_, k)
         ax, ay, az = J2_perturbation(
-            t0, u_, k, J2=Earth.J2.value, R=Earth.R.to(u.km).value
+            t0, u_, k, J2=Earth.J2.value, R=Earth.R.to(u.au).value
         )
         du_ad = np.array([0, 0, 0, ax, ay, az])
         return du_kep + du_ad
@@ -130,8 +130,8 @@ def test_J3_propagation_Earth(test_params):
     def f_combined(t0, u_, k):
         du_kep = func_twobody(t0, u_, k)
         ax, ay, az = J2_perturbation(
-            t0, u_, k, J2=Earth.J2.value, R=Earth.R.to_value(u.km)
-        ) + J3_perturbation(t0, u_, k, J3=Earth.J3.value, R=Earth.R.to_value(u.km))
+            t0, u_, k, J2=Earth.J2.value, R=Earth.R.to_value(u.au)
+        ) + J3_perturbation(t0, u_, k, J3=Earth.J3.value, R=Earth.R.to_value(u.au))
         du_ad = np.array([0, 0, 0, ax, ay, az])
         return du_kep + du_ad
 
@@ -140,13 +140,13 @@ def test_J3_propagation_Earth(test_params):
     a_values_J2 = np.array(
         [
             rv2coe(k, ri, vi)[0] / (1.0 - rv2coe(k, ri, vi)[1] ** 2)
-            for ri, vi in zip(r_J2.to(u.km).value, v_J2.to(u.km / u.s).value)
+            for ri, vi in zip(r_J2.to(u.au).value, v_J2.to(u.au / u.s).value)
         ]
     )
     a_values_J3 = np.array(
         [
             rv2coe(k, ri, vi)[0] / (1.0 - rv2coe(k, ri, vi)[1] ** 2)
-            for ri, vi in zip(r_J3.to(u.km).value, v_J3.to(u.km / u.s).value)
+            for ri, vi in zip(r_J3.to(u.au).value, v_J3.to(u.au / u.s).value)
         ]
     )
     da_max = np.max(np.abs(a_values_J2 - a_values_J3))
@@ -154,13 +154,13 @@ def test_J3_propagation_Earth(test_params):
     ecc_values_J2 = np.array(
         [
             rv2coe(k, ri, vi)[1]
-            for ri, vi in zip(r_J2.to(u.km).value, v_J2.to(u.km / u.s).value)
+            for ri, vi in zip(r_J2.to(u.au).value, v_J2.to(u.au / u.s).value)
         ]
     )
     ecc_values_J3 = np.array(
         [
             rv2coe(k, ri, vi)[1]
-            for ri, vi in zip(r_J3.to(u.km).value, v_J3.to(u.km / u.s).value)
+            for ri, vi in zip(r_J3.to(u.au).value, v_J3.to(u.au / u.s).value)
         ]
     )
     decc_max = np.max(np.abs(ecc_values_J2 - ecc_values_J3))
@@ -168,13 +168,13 @@ def test_J3_propagation_Earth(test_params):
     inc_values_J2 = np.array(
         [
             rv2coe(k, ri, vi)[2]
-            for ri, vi in zip(r_J2.to(u.km).value, v_J2.to(u.km / u.s).value)
+            for ri, vi in zip(r_J2.to(u.au).value, v_J2.to(u.au / u.s).value)
         ]
     )
     inc_values_J3 = np.array(
         [
             rv2coe(k, ri, vi)[2]
-            for ri, vi in zip(r_J3.to(u.km).value, v_J3.to(u.km / u.s).value)
+            for ri, vi in zip(r_J3.to(u.au).value, v_J3.to(u.au / u.s).value)
         ]
     )
     dinc_max = np.max(np.abs(inc_values_J2 - inc_values_J3))
@@ -182,7 +182,7 @@ def test_J3_propagation_Earth(test_params):
     assert_quantity_allclose(dinc_max, test_params["dinc_max"], rtol=1e-1, atol=1e-7)
     assert_quantity_allclose(decc_max, test_params["decc_max"], rtol=1e-1, atol=1e-7)
     try:
-        assert_quantity_allclose(da_max * u.km, test_params["da_max"])
+        assert_quantity_allclose(da_max * u.au, test_params["da_max"])
     except AssertionError:
         pytest.xfail("this assertion disagrees with the paper")
 
@@ -192,24 +192,24 @@ def test_atmospheric_drag_exponential():
     # http://farside.ph.utexas.edu/teaching/celestial/Celestialhtml/node94.html#sair (10.148)
     # Given the expression for \dot{r} / r, aproximate \Delta r \approx F_r * \Delta t
 
-    R = Earth.R.to(u.km).value
-    k = Earth.k.to(u.km ** 3 / u.s ** 2).value
+    R = Earth.R.to(u.au).value
+    k = Earth.k.to(u.au ** 3 / u.s ** 2).value
 
     # Parameters of a circular orbit with h = 250 km (any value would do, but not too small)
-    orbit = Orbit.circular(Earth, 250 * u.km)
+    orbit = Orbit.circular(Earth, 250 * u.au)
     r0, _ = orbit.rv()
-    r0 = r0.to(u.km).value
+    r0 = r0.to(u.au).value
 
     # Parameters of a body
     C_D = 2.2  # dimentionless (any value would do)
     A_over_m = ((np.pi / 4.0) * (u.m ** 2) / (100 * u.kg)).to_value(
-        u.km ** 2 / u.kg
+        u.au ** 2 / u.kg
     )  # km^2/kg
     B = C_D * A_over_m
 
     # Parameters of the atmosphere
-    rho0 = rho0_earth.to(u.kg / u.km ** 3).value  # kg/km^3
-    H0 = H0_earth.to(u.km).value  # km
+    rho0 = rho0_earth.to(u.kg / u.au ** 3).value  # kg/km^3
+    H0 = H0_earth.to(u.au).value  # km
     tof = 100000  # s
 
     dr_expected = -B * rho0 * np.exp(-(norm(r0) - R) / H0) * np.sqrt(k * norm(r0)) * tof
@@ -234,27 +234,27 @@ def test_atmospheric_drag_exponential():
     )
 
     assert_quantity_allclose(
-        norm(rr[0].to(u.km).value) - norm(r0), dr_expected, rtol=1e-2
+        norm(rr[0].to(u.au).value) - norm(r0), dr_expected, rtol=1e-2
     )
 
 
 @pytest.mark.slow
 def test_atmospheric_demise():
     # Test an orbital decay that hits Earth. No analytic solution.
-    R = Earth.R.to(u.km).value
+    R = Earth.R.to(u.au).value
 
-    orbit = Orbit.circular(Earth, 230 * u.km)
+    orbit = Orbit.circular(Earth, 230 * u.au)
     t_decay = 48.2179 * u.d  # not an analytic value
 
     # Parameters of a body
     C_D = 2.2  # dimentionless (any value would do)
     A_over_m = ((np.pi / 4.0) * (u.m ** 2) / (100 * u.kg)).to_value(
-        u.km ** 2 / u.kg
+        u.au ** 2 / u.kg
     )  # km^2/kg
 
     # Parameters of the atmosphere
-    rho0 = rho0_earth.to(u.kg / u.km ** 3).value  # kg/km^3
-    H0 = H0_earth.to(u.km).value  # km
+    rho0 = rho0_earth.to(u.kg / u.au ** 3).value  # kg/km^3
+    H0 = H0_earth.to(u.au).value  # km
 
     tofs = [365] * u.d  # Actually hits the ground a bit after day 48
 
@@ -278,7 +278,7 @@ def test_atmospheric_demise():
         f=f,
     )
 
-    assert_quantity_allclose(norm(rr[0].to(u.km).value), R, atol=1)  # Below 1km
+    assert_quantity_allclose(norm(rr[0].to(u.au).value), R, atol=1)  # Below 1km
 
     assert_quantity_allclose(lithobrake_event.last_t, t_decay, rtol=1e-2)
 
@@ -302,15 +302,15 @@ def test_atmospheric_demise():
 @pytest.mark.slow
 def test_atmospheric_demise_coesa76():
     # Test an orbital decay that hits Earth. No analytic solution.
-    R = Earth.R.to(u.km).value
+    R = Earth.R.to(u.au).value
 
-    orbit = Orbit.circular(Earth, 250 * u.km)
+    orbit = Orbit.circular(Earth, 250 * u.au)
     t_decay = 7.17 * u.d
 
     # Parameters of a body
     C_D = 2.2  # Dimensionless (any value would do)
     A_over_m = ((np.pi / 4.0) * (u.m ** 2) / (100 * u.kg)).to_value(
-        u.km ** 2 / u.kg
+        u.au ** 2 / u.kg
     )  # km^2/kg
 
     tofs = [365] * u.d
@@ -337,24 +337,24 @@ def test_atmospheric_demise_coesa76():
         f=f,
     )
 
-    assert_quantity_allclose(norm(rr[0].to(u.km).value), R, atol=1)  # Below 1km
+    assert_quantity_allclose(norm(rr[0].to(u.au).value), R, atol=1)  # Below 1km
 
     assert_quantity_allclose(lithobrake_event.last_t, t_decay, rtol=1e-2)
 
 
 @pytest.mark.slow
 def test_cowell_works_with_small_perturbations():
-    r0 = [-2384.46, 5729.01, 3050.46] * u.km
-    v0 = [-7.36138, -2.98997, 1.64354] * u.km / u.s
+    r0 = [-2384.46, 5729.01, 3050.46] * u.au
+    v0 = [-7.36138, -2.98997, 1.64354] * u.au / u.s
 
     r_expected = [
         13179.39566663877121754922,
         -13026.25123408228319021873,
         -9852.66213692844394245185,
-    ] * u.km
+    ] * u.au
     v_expected = (
         [2.78170542314378943516, 3.21596786944631274352, 0.16327165546278937791]
-        * u.km
+        * u.au
         / u.s
     )
 
@@ -379,8 +379,8 @@ def test_cowell_works_with_small_perturbations():
 
 @pytest.mark.slow
 def test_cowell_converges_with_small_perturbations():
-    r0 = [-2384.46, 5729.01, 3050.46] * u.km
-    v0 = [-7.36138, -2.98997, 1.64354] * u.km / u.s
+    r0 = [-2384.46, 5729.01, 3050.46] * u.au
+    v0 = [-7.36138, -2.98997, 1.64354] * u.au / u.s
 
     initial = Orbit.from_vectors(Earth, r0, v0)
 
@@ -408,7 +408,7 @@ moon_heo = {
     "argp": 0.15 * u.deg,
     "inc": 0.08 * u.deg,
     "orbit": [
-        26553.4 * u.km,
+        26553.4 * u.au,
         0.741 * u.one,
         63.4 * u.deg,
         0.0 * u.deg,
@@ -425,7 +425,7 @@ moon_leo = {
     "argp": 15.0 * 1e-3 * u.deg,
     "inc": 6.0 * 1e-4 * u.deg,
     "orbit": [
-        6678.126 * u.km,
+        6678.126 * u.au,
         0.01 * u.one,
         28.5 * u.deg,
         0.0 * u.deg,
@@ -442,7 +442,7 @@ moon_geo = {
     "argp": -11.0 * u.deg,
     "inc": 6.5 * 1e-3 * u.deg,
     "orbit": [
-        42164.0 * u.km,
+        42164.0 * u.au,
         0.0001 * u.one,
         1 * u.deg,
         0.0 * u.deg,
@@ -459,7 +459,7 @@ sun_heo = {
     "argp": 0.2 * u.deg,
     "inc": 0.1 * u.deg,
     "orbit": [
-        26553.4 * u.km,
+        26553.4 * u.au,
         0.741 * u.one,
         63.4 * u.deg,
         0.0 * u.deg,
@@ -476,7 +476,7 @@ sun_leo = {
     "argp": 0.02 * u.deg,
     "inc": -1.0 * 1e-4 * u.deg,
     "orbit": [
-        6678.126 * u.km,
+        6678.126 * u.au,
         0.01 * u.one,
         28.5 * u.deg,
         0.0 * u.deg,
@@ -493,7 +493,7 @@ sun_geo = {
     "argp": -5.5 * u.deg,
     "inc": 5.5e-3 * u.deg,
     "orbit": [
-        42164.0 * u.km,
+        42164.0 * u.au,
         0.0001 * u.one,
         1 * u.deg,
         0.0 * u.deg,
@@ -543,7 +543,7 @@ def test_3rd_body_Curtis(test_params):
                 t0,
                 u_,
                 k,
-                k_third=body.k.to(u.km ** 3 / u.s ** 2).value,
+                k_third=body.k.to(u.au ** 3 / u.s ** 2).value,
                 perturbation_body=body_r,
             )
             du_ad = np.array([0, 0, 0, ax, ay, az])
@@ -559,9 +559,9 @@ def test_3rd_body_Curtis(test_params):
         )
 
         incs, raans, argps = [], [], []
-        for ri, vi in zip(rr.to(u.km).value, vv.to(u.km / u.s).value):
+        for ri, vi in zip(rr.to(u.au).value, vv.to(u.au / u.s).value):
             angles = Angle(
-                rv2coe(Earth.k.to(u.km ** 3 / u.s ** 2).value, ri, vi)[2:5] * u.rad
+                rv2coe(Earth.k.to(u.au ** 3 / u.s ** 2).value, ri, vi)[2:5] * u.rad
             )  # inc, raan, argp
             angles = angles.wrap_at(180 * u.deg)
             incs.append(angles[0].value)
@@ -620,7 +620,7 @@ def test_solar_pressure(t_days, deltas_expected, sun_r):
         with pytest.warns(UserWarning, match="Wrapping true anomaly to -π <= nu < π"):
             initial = Orbit.from_classical(
                 Earth,
-                10085.44 * u.km,
+                10085.44 * u.au,
                 0.025422 * u.one,
                 88.3924 * u.deg,
                 45.38124 * u.deg,
@@ -637,7 +637,7 @@ def test_solar_pressure(t_days, deltas_expected, sun_r):
                 t0,
                 u_,
                 k,
-                R=Earth.R.to(u.km).value,
+                R=Earth.R.to(u.au).value,
                 C_R=2.0,
                 A_over_m=2e-4 / 100,
                 Wdivc_s=Wdivc_sun.value,
@@ -656,8 +656,8 @@ def test_solar_pressure(t_days, deltas_expected, sun_r):
         )
 
         delta_eccs, delta_incs, delta_raans, delta_argps = [], [], [], []
-        for ri, vi in zip(rr.to(u.km).value, vv.to(u.km / u.s).value):
-            orbit_params = rv2coe(Earth.k.to(u.km ** 3 / u.s ** 2).value, ri, vi)
+        for ri, vi in zip(rr.to(u.au).value, vv.to(u.au / u.s).value):
+            orbit_params = rv2coe(Earth.k.to(u.au ** 3 / u.s ** 2).value, ri, vi)
             delta_eccs.append(orbit_params[1] - initial.ecc.value)
             delta_incs.append(
                 (orbit_params[2] * u.rad).to(u.deg).value - initial.inc.value

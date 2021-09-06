@@ -173,7 +173,7 @@ def atmospheric_drag_model(t0, state, k, R, C_D, A_over_m, model):
         # The integration will go a little negative searching for H = R
         H = R
 
-    rho = model.density((H - R) * u.km).to(u.kg / u.km ** 3).value
+    rho = model.density((H - R) * u.au).to(u.kg / u.au ** 3).value
 
     return -(1.0 / 2.0) * rho * B * v * v_vec
 

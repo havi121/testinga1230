@@ -3,13 +3,13 @@ from astropy import units as u
 
 from poliastro.core.util import circular_velocity as circular_velocity_fast
 
-u_kms = u.km / u.s
-u_km3s2 = u.km ** 3 / u.s ** 2
+u_kms = u.au / u.s
+u_km3s2 = u.au ** 3 / u.s ** 2
 
 
 def circular_velocity(k, a):
     """Circular velocity for a given body (k) and semimajor axis (a)."""
-    return circular_velocity_fast(k.to(u_km3s2).value, a.to(u.km).value) * u_kms
+    return circular_velocity_fast(k.to(u_km3s2).value, a.to(u.au).value) * u_kms
 
 
 def mean_motion(k, a):

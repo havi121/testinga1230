@@ -61,8 +61,8 @@ def change_inc_ecc(ss_0, ecc_f, inc_f, f):
         return accel_v
 
     delta_V, beta_, t_f = extra_quantities(
-        ss_0.attractor.k.to(u.km ** 3 / u.s ** 2).value,
-        ss_0.a.to(u.km).value,
+        ss_0.attractor.k.to(u.au ** 3 / u.s ** 2).value,
+        ss_0.a.to(u.au).value,
         ecc_0,
         ecc_f,
         inc_0,

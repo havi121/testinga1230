@@ -14,14 +14,14 @@ from poliastro.earth.sensors import (
     "h, eta_fov, eta_center, expected_lambda_max, expected_lambda_min ",
     [
         (
-            800 * u.km,
+            800 * u.au,
             (25 * u.deg).to(u.rad),
             (40 * u.deg).to(u.rad),
             0.18736414 * u.rad,
             0.06649331 * u.rad,
         ),
         (
-            800 * u.km,
+            800 * u.au,
             (25 * u.deg).to(u.rad),
             (0 * u.deg).to(u.rad),
             0.0278967 * u.rad,
@@ -33,7 +33,7 @@ def test_max_and_min_ground_range(
     h, eta_fov, eta_center, expected_lambda_max, expected_lambda_min
 ):
 
-    R = Earth.R.to(u.km)
+    R = Earth.R.to(u.au)
     lambda_min, lambda_max = min_and_max_ground_range(h, eta_fov, eta_center, R)
     assert_quantity_allclose(lambda_max, expected_lambda_max)
     assert_quantity_allclose(lambda_min, expected_lambda_min)
@@ -44,7 +44,7 @@ def test_max_and_min_ground_range(
     "h, eta_fov, eta_center, beta, phi_nadir, lambda_nadir, expected_delta_lambda, expected_phi_tgt, expected_lambda_tgt",
     [
         (
-            800 * u.km,
+            800 * u.au,
             (25 * u.deg).to(u.rad),
             (40 * u.deg).to(u.rad),
             (140 * u.deg).to(u.rad),
@@ -68,7 +68,7 @@ def test_ground_range_diff_at_azimuth(
     expected_lambda_tgt,
 ):
 
-    R = Earth.R.to(u.km)
+    R = Earth.R.to(u.au)
     delta_lambda, phi_tgt, lambda_tgt = ground_range_diff_at_azimuth(
         h, eta_center, eta_fov, beta, phi_nadir, lambda_nadir, R
     )
@@ -82,7 +82,7 @@ def test_ground_range_diff_at_azimuth(
     "h, eta_fov, eta_center, beta, phi_nadir, lambda_nadir, expected_delta_lambda, expected_phi_tgt, expected_lambda_tgt",
     [
         (
-            800 * u.km,
+            800 * u.au,
             (25 * u.deg).to(u.rad),
             (40 * u.deg).to(u.rad),
             (190 * u.deg).to(u.rad),
@@ -106,7 +106,7 @@ def test_exception_ground_range_diff_at_azimuth(
     expected_lambda_tgt,
 ):
 
-    R = Earth.R.to(u.km)
+    R = Earth.R.to(u.au)
     with pytest.raises(ValueError) as excinfo:
         ground_range_diff_at_azimuth(
             h, eta_center, eta_fov, beta, phi_nadir, lambda_nadir, R

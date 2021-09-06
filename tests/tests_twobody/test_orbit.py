@@ -55,10 +55,10 @@ from poliastro.warnings import OrbitSamplingWarning, PatchedConicsWarning
 
 @pytest.fixture()
 def hyperbolic():
-    r = [1.197659243752796e09, -4.443716685978071e09, -1.747610548576734e09] * u.km
+    r = [1.197659243752796e09, -4.443716685978071e09, -1.747610548576734e09] * u.au
     v = (
         [5.540549267188614e00, -1.251544669134140e01, -4.848892572767733e00]
-        * u.km
+        * u.au
         / u.s
     )
     epoch = Time("2015-07-14 07:59", scale="tdb")
@@ -67,14 +67,14 @@ def hyperbolic():
 
 @pytest.fixture()
 def near_parabolic():
-    r = [8.0e3, 1.0e3, 0.0] * u.km
-    v = [-0.5, -0.5, 0.0] * u.km / u.s
+    r = [8.0e3, 1.0e3, 0.0] * u.au
+    v = [-0.5, -0.5, 0.0] * u.au / u.s
 
     return Orbit.from_vectors(Earth, r, v)
 
 
 def test_default_time_for_new_state():
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _ = 0.5 * u.one  # Unused dimensionless value
     _a = 1.0 * u.deg  # Unused angle
     _body = Sun  # Unused body
@@ -84,10 +84,10 @@ def test_default_time_for_new_state():
 
 
 def test_state_raises_unitserror_if_elements_units_are_wrong():
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _ = 0.5 * u.one  # Unused dimensionless value
     _a = 1.0 * u.deg  # Unused angle
-    wrong_angle = 1.0 * u.AU
+    wrong_angle = 1.0 * u.au
     with pytest.raises(u.UnitsError) as excinfo:
         Orbit.from_classical(Sun, _d, _, _a, _a, _a, wrong_angle)
     assert (
@@ -97,7 +97,7 @@ def test_state_raises_unitserror_if_elements_units_are_wrong():
 
 
 def test_orbit_from_classical_wraps_out_of_range_anomaly_and_warns():
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _ = 0.5 * u.one  # Unused dimensionless value
     _a = 1.0 * u.deg  # Unused angle
     out_angle = np.pi * u.rad
@@ -106,8 +106,8 @@ def test_orbit_from_classical_wraps_out_of_range_anomaly_and_warns():
 
 
 def test_state_raises_unitserror_if_rv_units_are_wrong():
-    _d = [1.0, 0.0, 0.0] * u.AU
-    wrong_v = [0.0, 1.0e-6, 0.0] * u.AU
+    _d = [1.0, 0.0, 0.0] * u.au
+    wrong_v = [0.0, 1.0e-6, 0.0] * u.au
     with pytest.raises(u.UnitsError) as excinfo:
         Orbit.from_vectors(Sun, _d, wrong_v)
     assert (
@@ -119,7 +119,7 @@ def test_state_raises_unitserror_if_rv_units_are_wrong():
 def test_parabolic_elements_fail_early():
     attractor = Earth
     ecc = 1.0 * u.one
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _a = 1.0 * u.deg  # Unused angle
     with pytest.raises(ValueError) as excinfo:
         Orbit.from_classical(attractor, _d, ecc, _a, _a, _a, _a)
@@ -130,7 +130,7 @@ def test_parabolic_elements_fail_early():
 
 
 def test_bad_inclination_raises_exception():
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _ = 0.5 * u.one  # Unused dimensionless value
     _a = 1.0 * u.deg  # Unused angle
     _body = Sun  # Unused body
@@ -143,7 +143,7 @@ def test_bad_inclination_raises_exception():
 
 
 def test_bad_hyperbolic_raises_exception():
-    bad_a = 1.0 * u.AU
+    bad_a = 1.0 * u.au
     ecc = 1.5 * u.one
     _inc = 100 * u.deg  # Unused inclination
     _a = 1.0 * u.deg  # Unused angle
@@ -154,25 +154,25 @@ def test_bad_hyperbolic_raises_exception():
 
 
 def test_apply_maneuver_changes_epoch():
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _ = 0.5 * u.one  # Unused dimensionless value
     _a = 1.0 * u.deg  # Unused angle
     ss = Orbit.from_classical(Sun, _d, _, _a, _a, _a, _a)
     dt = 1 * u.h
-    dv = [0, 0, 0] * u.km / u.s
+    dv = [0, 0, 0] * u.au / u.s
     orbit_new = ss.apply_maneuver([(dt, dv)])
     assert orbit_new.epoch == ss.epoch + dt
 
 
 def test_apply_maneuver_returns_intermediate_states_if_true():
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _ = 0.5 * u.one  # Unused dimensionless value
     _a = 1.0 * u.deg  # Unused angle
     ss = Orbit.from_classical(Sun, _d, _, _a, _a, _a, _a)
     dt1 = 0.5 * u.h
-    dv1 = [5, 0, 10] * u.km / u.s
+    dv1 = [5, 0, 10] * u.au / u.s
     dt2 = 0.5 * u.h
-    dv2 = [0, 5, 10] * u.km / u.s
+    dv2 = [0, 5, 10] * u.au / u.s
 
     states = ss.apply_maneuver([(dt1, dv1), (dt2, dv2)], intermediate=True)
 
@@ -181,7 +181,7 @@ def test_apply_maneuver_returns_intermediate_states_if_true():
 
 
 def test_circular_has_proper_semimajor_axis():
-    alt = 500 * u.km
+    alt = 500 * u.au
     attractor = Earth
     expected_a = Earth.R + alt
     ss = Orbit.circular(attractor, alt)
@@ -197,14 +197,14 @@ def test_circular_raises_error_if_negative_altitude():
 def test_geosync_has_proper_period():
     expected_period = 1436 * u.min
 
-    ss = Orbit.circular(Earth, alt=42164 * u.km - Earth.R)
+    ss = Orbit.circular(Earth, alt=42164 * u.au - Earth.R)
 
     assert_quantity_allclose(ss.period, expected_period, rtol=1e-4)
 
 
 def test_parabolic_has_proper_eccentricity():
     attractor = Earth
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _a = 1.0 * u.deg  # Unused angle
     expected_ecc = 1.0 * u.one
     ss = Orbit.parabolic(attractor, _d, _a, _a, _a, _a)
@@ -213,7 +213,7 @@ def test_parabolic_has_proper_eccentricity():
 
 def test_parabolic_has_zero_energy():
     attractor = Earth
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _a = 1.0 * u.deg  # Unused angle
     ss = Orbit.parabolic(attractor, _d, _a, _a, _a, _a)
     assert_allclose(ss.energy.value, 0.0, atol=1e-16)
@@ -221,7 +221,7 @@ def test_parabolic_has_zero_energy():
 
 @pytest.mark.filterwarnings("ignore::DeprecationWarning")
 def test_pqw_for_circular_equatorial_orbit():
-    ss = Orbit.circular(Earth, 600 * u.km)
+    ss = Orbit.circular(Earth, 600 * u.au)
     expected_p = [1, 0, 0] * u.one
     expected_q = [0, 1, 0] * u.one
     expected_w = [0, 0, 1] * u.one
@@ -324,7 +324,7 @@ def test_frozen_orbit_with_non_critical_argp(
 
 
 def test_frozen_orbit_non_critical_inclination():
-    orbit = Orbit.frozen(Earth, 1e3 * u.km, inc=0 * u.deg)  # Non-critical value
+    orbit = Orbit.frozen(Earth, 1e3 * u.au, inc=0 * u.deg)  # Non-critical value
     assert orbit.argp in [np.pi / 2, 3 * np.pi / 2] * u.rad
 
 
@@ -353,7 +353,7 @@ def test_frozen_orbit_altitude():
 
 def test_orbit_representation():
     ss = Orbit.circular(
-        Earth, 600 * u.km, 20 * u.deg, epoch=Time("2018-09-08 09:04:00", scale="tdb")
+        Earth, 600 * u.au, 20 * u.deg, epoch=Time("2018-09-08 09:04:00", scale="tdb")
     )
     expected_str = "6978 x 6978 km x 20.0 deg (GCRS) orbit around Earth (\u2641) at epoch 2018-09-08 09:04:00.000 (TDB)"
 
@@ -362,8 +362,8 @@ def test_orbit_representation():
 
 def test_orbit_no_frame_representation():
     date_launch = Time("2011-11-26 15:02", scale="utc")
-    r = [61_445.76498656, 24_827.93010168, 0.0] * u.km
-    v = [-0.42581645, -0.18867869, 0.0] * u.km / u.s
+    r = [61_445.76498656, 24_827.93010168, 0.0] * u.au
+    v = [-0.42581645, -0.18867869, 0.0] * u.au / u.s
     ss = Orbit.from_vectors(Moon, r, v, date_launch)
     expected_str = "106 x -142299 km x 180.0 deg orbit around Moon (\u263E) at epoch 2011-11-26 15:02:00.000 (UTC)"
 
@@ -371,7 +371,7 @@ def test_orbit_no_frame_representation():
 
 
 def test_sample_numpoints():
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _ = 0.5 * u.one  # Unused dimensionless value
     _a = 1.0 * u.deg  # Unused angle
     _body = Sun  # Unused body
@@ -383,8 +383,8 @@ def test_sample_numpoints():
 @pytest.mark.parametrize("num_points", [3, 5, 7, 9, 11, 101])
 def test_sample_num_points(num_points):
     # Data from Vallado, example 2.4
-    r0 = [1_131.340, -2_282.343, 6_672.423] * u.km
-    v0 = [-5.64305, 4.30333, 2.42879] * u.km / u.s
+    r0 = [1_131.340, -2_282.343, 6_672.423] * u.au
+    v0 = [-5.64305, 4.30333, 2.42879] * u.au / u.s
     ss0 = Orbit.from_vectors(Earth, r0, v0)
 
     # TODO: Test against the perigee and apogee
@@ -400,8 +400,8 @@ def test_sample_big_orbits():
     # See https://github.com/poliastro/poliastro/issues/265
     ss = Orbit.from_vectors(
         Sun,
-        [-9_018_878.6, -94_116_055, 22_619_059] * u.km,
-        [-49.950923, -12.948431, -4.2925158] * u.km / u.s,
+        [-9_018_878.6, -94_116_055, 22_619_059] * u.au,
+        [-49.950923, -12.948431, -4.2925158] * u.au / u.s,
     )
     positions = ss.sample(15)
     assert len(positions) == 15
@@ -417,8 +417,8 @@ def test_hyperbolic_nu_value_check(hyperbolic):
 def test_hyperbolic_modulus_wrapped_nu():
     ss = Orbit.from_vectors(
         Sun,
-        [-9.77441841e07, 1.01000539e08, 4.37584668e07] * u.km,
-        [23.75936985, -43.09599568, -8.7084724] * u.km / u.s,
+        [-9.77441841e07, 1.01000539e08, 4.37584668e07] * u.au,
+        [23.75936985, -43.09599568, -8.7084724] * u.au / u.s,
     )
     num_values = 3
 
@@ -458,8 +458,8 @@ def test_orbit_is_pickable(hyperbolic):
 
 def test_orbit_plot_is_static():
     # Data from Curtis, example 4.3
-    r = [-6_045, -3_490, 2_500] * u.km
-    v = [-3.457, 6.618, 2.533] * u.km / u.s
+    r = [-6_045, -3_490, 2_500] * u.au
+    v = [-3.457, 6.618, 2.533] * u.au / u.s
     ss = Orbit.from_vectors(Earth, r, v)
 
     plot = ss.plot()
@@ -470,8 +470,8 @@ def test_orbit_plot_is_static():
 
 def test_orbit_plot_static_3d():
     # Data from Curtis, example 4.3
-    r = [-6_045, -3_490, 2_500] * u.km
-    v = [-3.457, 6.618, 2.533] * u.km / u.s
+    r = [-6_045, -3_490, 2_500] * u.au
+    v = [-3.457, 6.618, 2.533] * u.au / u.s
     ss = Orbit.from_vectors(Earth, r, v)
     with pytest.raises(
         ValueError,
@@ -485,8 +485,8 @@ def test_orbit_plot_is_not_static(use_3d):
     from plotly.graph_objects import Figure
 
     # Data from Curtis, example 4.3
-    r = [-6_045, -3_490, 2_500] * u.km
-    v = [-3.457, 6.618, 2.533] * u.km / u.s
+    r = [-6_045, -3_490, 2_500] * u.au
+    v = [-3.457, 6.618, 2.533] * u.au / u.s
     ss = Orbit.from_vectors(Earth, r, v)
 
     plot = ss.plot(interactive=True, use_3d=use_3d)
@@ -510,8 +510,8 @@ def test_orbit_plot_is_not_static(use_3d):
 )
 def test_orbit_get_frame_returns_proper_frame(attractor, expected_frame_class):
     # Dummy data
-    r = [1e09, -4e09, -1e09] * u.km
-    v = [5e00, -1e01, -4e00] * u.km / u.s
+    r = [1e09, -4e09, -1e09] * u.au
+    v = [5e00, -1e01, -4e00] * u.au / u.s
     epoch = Time("2015-07-14 07:59", scale="tdb")
 
     ss = Orbit.from_vectors(attractor, r, v, epoch)
@@ -522,10 +522,10 @@ def test_orbit_get_frame_returns_proper_frame(attractor, expected_frame_class):
 
 
 def test_orbit_from_custom_body_raises_error_when_asked_frame():
-    attractor = Body(Sun, 1 * u.km ** 3 / u.s ** 2, "_DummyPlanet")
+    attractor = Body(Sun, 1 * u.au ** 3 / u.s ** 2, "_DummyPlanet")
 
-    r = [1e09, -4e09, -1e09] * u.km
-    v = [5e00, -1e01, -4e00] * u.km / u.s
+    r = [1e09, -4e09, -1e09] * u.au
+    v = [5e00, -1e01, -4e00] * u.au / u.s
 
     ss = Orbit.from_vectors(attractor, r, v)
 
@@ -538,8 +538,8 @@ def test_orbit_from_custom_body_raises_error_when_asked_frame():
 
 
 def test_orbit_accepts_ecliptic_plane():
-    r = [1e09, -4e09, -1e09] * u.km
-    v = [5e00, -1e01, -4e00] * u.km / u.s
+    r = [1e09, -4e09, -1e09] * u.au
+    v = [5e00, -1e01, -4e00] * u.au / u.s
 
     ss = Orbit.from_vectors(Sun, r, v, plane=Planes.EARTH_ECLIPTIC)
 
@@ -547,8 +547,8 @@ def test_orbit_accepts_ecliptic_plane():
 
 
 def test_orbit_represent_as_produces_correct_data():
-    r = [1e09, -4e09, -1e09] * u.km
-    v = [5e00, -1e01, -4e00] * u.km / u.s
+    r = [1e09, -4e09, -1e09] * u.au
+    v = [5e00, -1e01, -4e00] * u.au / u.s
 
     ss = Orbit.from_vectors(Sun, r, v)
 
@@ -567,8 +567,8 @@ def test_orbit_represent_as_produces_correct_data():
 
 
 def test_orbit_propagate_retains_plane():
-    r = [1e09, -4e09, -1e09] * u.km
-    v = [5e00, -1e01, -4e00] * u.km / u.s
+    r = [1e09, -4e09, -1e09] * u.au
+    v = [5e00, -1e01, -4e00] * u.au / u.s
 
     ss = Orbit.from_vectors(Sun, r, v, plane=Planes.EARTH_ECLIPTIC)
 
@@ -585,12 +585,12 @@ def test_orbit_propagate_retains_plane():
     [
         (
             Earth,
-            Earth.R + 35786 * u.km,
+            Earth.R + 35786 * u.au,
             Earth.rotational_period,
         ),
         (
             Mars,
-            Mars.R + 17031 * u.km,
+            Mars.R + 17031 * u.au,
             Mars.rotational_period,
         ),
     ],
@@ -606,12 +606,12 @@ def test_stationary_orbit(attractor, expected_a, expected_period):
     [
         (
             Earth,
-            Earth.R + 35786 * u.km,
+            Earth.R + 35786 * u.au,
             Earth.rotational_period,
         ),
         (
             Mars,
-            Mars.R + 17031 * u.km,
+            Mars.R + 17031 * u.au,
             Mars.rotational_period,
         ),
     ],
@@ -630,13 +630,13 @@ def test_synchronous_orbit_without_ecc_and_inclination_given(
         (
             Mercury,
             0.0167 * u.one,
-            Mercury.R + 240453 * u.km,
+            Mercury.R + 240453 * u.au,
             Mercury.rotational_period,
         ),
         (
             Jupiter,
             0.0934 * u.one,
-            Jupiter.R + 88565 * u.km,
+            Jupiter.R + 88565 * u.au,
             Jupiter.rotational_period,
         ),
     ],
@@ -656,7 +656,7 @@ def test_synchronous_orbit_without_inclination_given(
         (
             Mercury,
             1 * u.one,
-            Mercury.R + 240453 * u.km,
+            Mercury.R + 240453 * u.au,
             Mercury.rotational_period,
         )
     ],
@@ -676,13 +676,13 @@ def test_synchronous_orbit_pericenter_smaller_than_atractor_radius(
         (
             Mercury,
             0.0167 * u.one,
-            2 ** (2 / 3) * (Mercury.R + 240453 * u.km),
+            2 ** (2 / 3) * (Mercury.R + 240453 * u.au),
             2 * Mercury.rotational_period,
         ),
         (
             Jupiter,
             0.0934 * u.one,
-            2 ** (2 / 3) * (Jupiter.R + 88565 * u.km),
+            2 ** (2 / 3) * (Jupiter.R + 88565 * u.au),
             2 * Jupiter.rotational_period,
         ),
     ],
@@ -702,13 +702,13 @@ def test_synchronous_orbit_supersynchronous(
         (
             Mercury,
             0.0167 * u.one,
-            0.5 ** (2 / 3) * (Mercury.R + 240453 * u.km),
+            0.5 ** (2 / 3) * (Mercury.R + 240453 * u.au),
             0.5 * Mercury.rotational_period,
         ),
         (
             Jupiter,
             0.0934 * u.one,
-            0.5 ** (2 / 3) * (Jupiter.R + 88565 * u.km),
+            0.5 ** (2 / 3) * (Jupiter.R + 88565 * u.au),
             0.5 * Jupiter.rotational_period,
         ),
     ],
@@ -732,14 +732,14 @@ def test_heliosynchronous_orbit_enough_arguments():
 
 def test_heliosynchronous_orbit_without_earth():
     with pytest.raises(NotImplementedError) as excinfo:
-        Orbit.heliosynchronous(Mars, a=800 * u.km + Mars.R, ecc=0 * u.one)
+        Orbit.heliosynchronous(Mars, a=800 * u.au + Mars.R, ecc=0 * u.one)
     assert "Attractors other than Earth not supported yet" in excinfo.exconly()
 
 
 def test_heliosynchronous_orbit_inc():
     # Vallado, example 11-2a
     expected_ecc = 0 * u.one
-    expected_a = 800 * u.km + Earth.R
+    expected_a = 800 * u.au + Earth.R
     expected_inc = 98.6 * u.deg
     ss0 = Orbit.heliosynchronous(Earth, a=expected_a, ecc=expected_ecc)
 
@@ -752,7 +752,7 @@ def test_heliosynchronous_orbit_a():
     # Vallado, example 11-2b
     expected_ecc = 0.2 * u.one
     expected_inc = 98.6 * u.deg
-    expected_a = 7346.846 * u.km
+    expected_a = 7346.846 * u.au
     ss0 = Orbit.heliosynchronous(Earth, ecc=expected_ecc, inc=expected_inc)
 
     assert_quantity_allclose(ss0.inc, expected_inc, rtol=1e-4)
@@ -764,7 +764,7 @@ def test_heliosynchronous_orbit_ecc():
     # Vallado, example 11-2b
     expected_ecc = 0.0 * u.one
     expected_inc = 98.6 * u.deg
-    expected_a = 7178.1363 * u.km
+    expected_a = 7178.1363 * u.au
     ss0 = Orbit.heliosynchronous(Earth, a=expected_a, inc=expected_inc)
 
     assert_quantity_allclose(ss0.inc, expected_inc, rtol=1e-4)
@@ -775,7 +775,7 @@ def test_heliosynchronous_orbit_ecc():
 
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
 def test_heliosynchronous_orbit_raises_floating_point_error_if_invalid_input():
-    a = 0 * u.km
+    a = 0 * u.au
     inc = 0 * u.rad
 
     with pytest.raises(ValueError) as excinfo:
@@ -784,14 +784,14 @@ def test_heliosynchronous_orbit_raises_floating_point_error_if_invalid_input():
 
 
 def test_perigee_and_apogee():
-    expected_r_a = 500 * u.km
-    expected_r_p = 300 * u.km
+    expected_r_a = 500 * u.au
+    expected_r_p = 300 * u.au
     a = (expected_r_a + expected_r_p) / 2
     ecc = expected_r_a / a - 1
     _a = 1.0 * u.deg  # Unused angle
     ss = Orbit.from_classical(Earth, a, ecc, _a, _a, _a, _a)
-    assert_allclose(ss.r_a.to(u.km).value, expected_r_a.to(u.km).value)
-    assert_allclose(ss.r_p.to(u.km).value, expected_r_p.to(u.km).value)
+    assert_allclose(ss.r_a.to(u.au).value, expected_r_a.to(u.au).value)
+    assert_allclose(ss.r_p.to(u.au).value, expected_r_p.to(u.au).value)
 
 
 def test_expected_mean_anomaly():
@@ -801,7 +801,7 @@ def test_expected_mean_anomaly():
     attractor = Earth
 
     _a = 1.0 * u.deg  # Unused angle
-    a = 15_300 * u.km
+    a = 15_300 * u.au
     ecc = 0.37255 * u.one
     nu = 120 * u.deg
 
@@ -813,12 +813,12 @@ def test_expected_mean_anomaly():
 
 def test_expected_angular_momentum():
     # Example from Curtis
-    expected_ang_mag = 72472 * u.km ** 2
+    expected_ang_mag = 72472 * u.au ** 2
 
     attractor = Earth
 
     _a = 1.0 * u.deg  # Unused angle
-    a = 15_300 * u.km
+    a = 15_300 * u.au
     ecc = 0.37255 * u.one
     nu = 120 * u.deg
 
@@ -835,7 +835,7 @@ def test_expected_last_perifocal_passage():
     attractor = Earth
 
     _a = 1.0 * u.deg  # Unused angle
-    a = 15_300 * u.km
+    a = 15_300 * u.au
     ecc = 0.37255 * u.one
     nu = 120 * u.deg
 
@@ -848,14 +848,14 @@ def test_expected_last_perifocal_passage():
 def test_convert_from_rv_to_coe():
     # Data from Vallado, example 2.6
     attractor = Earth
-    p = 11_067.790 * u.km
+    p = 11_067.790 * u.au
     ecc = 0.83285 * u.one
     inc = 87.87 * u.deg
     raan = 227.89 * u.deg
     argp = 53.38 * u.deg
     nu = 92.335 * u.deg
-    expected_r = [6_525.344, 6_861.535, 6_449.125] * u.km
-    expected_v = [4.902276, 5.533124, -1.975709] * u.km / u.s
+    expected_r = [6_525.344, 6_861.535, 6_449.125] * u.au
+    expected_v = [4.902276, 5.533124, -1.975709] * u.au / u.s
 
     r, v = Orbit.from_classical(
         attractor, p / (1 - ecc ** 2), ecc, inc, raan, argp, nu
@@ -868,10 +868,10 @@ def test_convert_from_rv_to_coe():
 def test_convert_from_coe_to_rv():
     # Data from Vallado, example 2.5
     attractor = Earth
-    r = [6_524.384, 6_862.875, 6_448.296] * u.km
-    v = [4.901327, 5.533756, -1.976341] * u.km / u.s
+    r = [6_524.384, 6_862.875, 6_448.296] * u.au
+    v = [4.901327, 5.533756, -1.976341] * u.au / u.s
 
-    expected_p = 11_067.79 * u.km
+    expected_p = 11_067.79 * u.au
     expected_ecc = 0.832853 * u.one
     expected_inc = 87.870 * u.deg
     expected_raan = 227.89 * u.deg
@@ -893,7 +893,7 @@ def test_convert_from_coe_to_rv():
 
 @pytest.mark.filterwarnings("ignore::DeprecationWarning")
 def test_perifocal_points_to_perigee():
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _ = 0.5 * u.one  # Unused dimensionless value
     _a = 1.0 * u.deg  # Unused angle
     ss = Orbit.from_classical(Sun, _d, _, _a, _a, _a, _a)
@@ -902,16 +902,16 @@ def test_perifocal_points_to_perigee():
 
 
 def test_arglat_within_range():
-    r = [3_539.08827417, 5_310.19903462, 3_066.31301457] * u.km
-    v = [-6.49780849, 3.24910291, 1.87521413] * u.km / u.s
+    r = [3_539.08827417, 5_310.19903462, 3_066.31301457] * u.au
+    v = [-6.49780849, 3.24910291, 1.87521413] * u.au / u.s
     ss = Orbit.from_vectors(Earth, r, v)
     assert 0 * u.deg <= ss.arglat <= 360 * u.deg
 
 
 @pytest.mark.filterwarnings("ignore::DeprecationWarning")
 def test_pqw_returns_dimensionless():
-    r_0 = ([1, 0, 0] * u.au).to(u.km)  # type: ignore
-    v_0 = ([0, 6, 0] * u.au / u.year).to(u.km / u.day)
+    r_0 = ([1, 0, 0] * u.au).to(u.au)  # type: ignore
+    v_0 = ([0, 6, 0] * u.au / u.year).to(u.au / u.day)
     ss = Orbit.from_vectors(Sun, r_0, v_0)
 
     p, q, w = ss.pqw()
@@ -922,7 +922,7 @@ def test_pqw_returns_dimensionless():
 
 
 def test_from_coord_fails_if_no_time_differential():
-    pos = [30_000, 0, 0] * u.km
+    pos = [30_000, 0, 0] * u.au
     cartrep = CartesianRepresentation(*pos)
 
     # Method fails if coordinate instance doesn't contain a differential with
@@ -939,10 +939,10 @@ def test_from_coord_fails_if_no_time_differential():
     "attractor", [Earth, Jupiter, Mars, Mercury, Neptune, Saturn, Sun, Uranus, Venus]
 )
 def test_orbit_creation_using_skycoord(attractor):
-    vel = [0, 2, 0] * u.km / u.s
+    vel = [0, 2, 0] * u.au / u.s
     cartdiff = CartesianDifferential(*vel)
 
-    pos = [30_000, 0, 0] * u.km
+    pos = [30_000, 0, 0] * u.au
     cartrep = CartesianRepresentation(*pos, differentials=cartdiff)
 
     coord = SkyCoord(cartrep, frame="icrs")
@@ -967,10 +967,10 @@ def test_orbit_creation_using_skycoord(attractor):
 @pytest.mark.parametrize("frame", [ITRS, GCRS])
 @pytest.mark.parametrize("obstime", [J2000, J2000_TDB])
 def test_orbit_creation_using_frame_obj(attractor, frame, obstime):
-    vel = [0, 2, 0] * u.km / u.s
+    vel = [0, 2, 0] * u.au / u.s
     cartdiff = CartesianDifferential(*vel)
 
-    pos = [30_000, 0, 0] * u.km
+    pos = [30_000, 0, 0] * u.au
     cartrep = CartesianRepresentation(*pos, differentials=cartdiff)
 
     coord = frame(cartrep, obstime=obstime)
@@ -985,17 +985,17 @@ def test_orbit_creation_using_frame_obj(attractor, frame, obstime):
     pos_transformed_to_irf = coord_transformed_to_irf.cartesian.xyz
     vel_transformed_to_irf = coord_transformed_to_irf.cartesian.differentials["s"].d_xyz
 
-    assert_quantity_allclose(o.r, pos_transformed_to_irf, atol=1e-5 * u.km)
-    assert_quantity_allclose(o.v, vel_transformed_to_irf, atol=1e-5 * u.km / u.s)
+    assert_quantity_allclose(o.r, pos_transformed_to_irf, atol=1e-5 * u.au)
+    assert_quantity_allclose(o.v, vel_transformed_to_irf, atol=1e-5 * u.au / u.s)
 
 
 @pytest.mark.parametrize("obstime", [J2000, J2000_TDB])
 def test_from_coord_fails_for_multiple_positions(obstime):
     cartdiff = CartesianDifferential(
-        [[0, 1, 0], [-0.1, 0.9, 0]] * u.km / u.s, xyz_axis=1
+        [[0, 1, 0], [-0.1, 0.9, 0]] * u.au / u.s, xyz_axis=1
     )
     cartrep = CartesianRepresentation(
-        [[1, 0, 0], [0.9, 0.1, 0]] * u.km, differentials=cartdiff, xyz_axis=1
+        [[1, 0, 0], [0.9, 0.1, 0]] * u.au, differentials=cartdiff, xyz_axis=1
     )
     coords = GCRS(cartrep, representation_type=CartesianRepresentation, obstime=obstime)
 
@@ -1010,22 +1010,22 @@ def test_from_coord_fails_for_multiple_positions(obstime):
 def test_from_coord_if_coord_is_not_of_shape_zero():
     pos = [0, 1, 0]
     vel = [1, 0, 0]
-    cartdiff = CartesianDifferential([vel] * u.km / u.s, xyz_axis=1)
-    cartrep = CartesianRepresentation([pos] * u.km, differentials=cartdiff, xyz_axis=1)
+    cartdiff = CartesianDifferential([vel] * u.au / u.s, xyz_axis=1)
+    cartrep = CartesianRepresentation([pos] * u.au, differentials=cartdiff, xyz_axis=1)
     coords = GCRS(cartrep, representation_type=CartesianRepresentation, obstime=J2000)
 
     ss = Orbit.from_coords(Earth, coords)
 
-    assert_quantity_allclose(ss.r, pos * u.km, rtol=1e-5)
-    assert_quantity_allclose(ss.v, vel * u.km / u.s, rtol=1e-5)
+    assert_quantity_allclose(ss.r, pos * u.au, rtol=1e-5)
+    assert_quantity_allclose(ss.v, vel * u.au / u.s, rtol=1e-5)
 
 
 def test_propagate_to_anomaly_gives_expected_result():
     # From "Going to Jupiter with Python using Jupyter and poliastro.ipynb"
     ic1 = Orbit.from_vectors(
         Sun,
-        [1.02465527e08, -1.02313505e08, -4.43533465e07] * u.km,
-        [2198705.82621226, 1897186.74383856, 822370.88977487] * u.km / u.day,
+        [1.02465527e08, -1.02313505e08, -4.43533465e07] * u.au,
+        [2198705.82621226, 1897186.74383856, 822370.88977487] * u.au / u.day,
         Time("2011-08-05 16:26:06.183", scale="tdb"),
     )
     ic1_end = ic1.propagate_to_anomaly(180.0 * u.deg)
@@ -1039,8 +1039,8 @@ def test_sample_with_out_of_range_anomaly_works():
     # From "Going to Jupiter with Python using Jupyter and poliastro.ipynb"
     ic1 = Orbit.from_vectors(
         Sun,
-        [1.02465527e08, -1.02313505e08, -4.43533465e07] * u.km,
-        [2198705.82621226, 1897186.74383856, 822370.88977487] * u.km / u.day,
+        [1.02465527e08, -1.02313505e08, -4.43533465e07] * u.au,
+        [2198705.82621226, 1897186.74383856, 822370.88977487] * u.au / u.day,
         Time("2011-08-05 16:26:06.183", scale="tdb"),
     )
     coordinates = ic1.sample(3, max_anomaly=180.0 * u.deg)
@@ -1076,8 +1076,8 @@ def test_from_ephem_has_expected_properties():
 
 
 def test_from_vectors_wrong_dimensions_fails():
-    bad_r = [[1000, 0, 0]] * u.km
-    bad_v = [[[0, 10, 0]]] * u.km / u.s
+    bad_r = [[1000, 0, 0]] * u.au
+    bad_v = [[[0, 10, 0]]] * u.au / u.s
 
     with pytest.raises(ValueError) as excinfo:
         Orbit.from_vectors(Earth, bad_r, bad_v)
@@ -1085,7 +1085,7 @@ def test_from_vectors_wrong_dimensions_fails():
 
 
 def test_from_classical_wrong_dimensions_fails():
-    bad_a = [1.0] * u.AU
+    bad_a = [1.0] * u.au
     _ = 0.5 * u.one  # Unused dimensionless value
     _a = 1.0 * u.deg  # Unused angle
 
@@ -1101,8 +1101,8 @@ def test_orbit_change_attractor_returns_self():
 def test_orbit_change_attractor_out_of_SOI():
     ss = Orbit.from_vectors(
         Sun,
-        r=[5.98967334e08, 4.09500684e08, 1.60955500e08] * u.km,
-        v=[-13.30694373, 25.15256978, 11.59846936] * u.km / u.s,
+        r=[5.98967334e08, 4.09500684e08, 1.60955500e08] * u.au,
+        v=[-13.30694373, 25.15256978, 11.59846936] * u.au / u.s,
         epoch=J2000,
     )
 
@@ -1114,8 +1114,8 @@ def test_orbit_change_attractor_out_of_SOI():
 def test_orbit_change_attractor_force():
     ss = Orbit.from_vectors(
         Sun,
-        r=[5.98967334e08, 4.09500684e08, 1.60955500e08] * u.km,
-        v=[-13.30694373, 25.15256978, 11.59846936] * u.km / u.s,
+        r=[5.98967334e08, 4.09500684e08, 1.60955500e08] * u.au,
+        v=[-13.30694373, 25.15256978, 11.59846936] * u.au / u.s,
         epoch=J2000,
     )
     with pytest.warns(
@@ -1141,8 +1141,8 @@ def test_orbit_change_attractor_closed():
 
 
 def test_orbit_change_attractor_open():
-    r = [-6_045, -3_490, 2_500] * u.km
-    v = [-15.457, 6.618, 2.533] * u.km / u.s
+    r = [-6_045, -3_490, 2_500] * u.au
+    v = [-15.457, 6.618, 2.533] * u.au / u.s
     ss = Orbit.from_vectors(Earth, r, v)
 
     with pytest.warns(

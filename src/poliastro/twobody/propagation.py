@@ -80,9 +80,9 @@ def cowell(k, r, v, tofs, rtol=1e-11, *, events=None, f=func_twobody):
     (unless a terminal event is defined) and calculates the other values via dense output.
 
     """
-    k = k.to_value(u.km ** 3 / u.s ** 2)
-    x, y, z = r.to_value(u.km)
-    vx, vy, vz = v.to_value(u.km / u.s)
+    k = k.to_value(u.au ** 3 / u.s ** 2)
+    x, y, z = r.to_value(u.au)
+    vx, vy, vz = v.to_value(u.au / u.s)
     tofs = tofs.to_value(u.s)
 
     u0 = np.array([x, y, z, vx, vy, vz])
@@ -122,7 +122,7 @@ def cowell(k, r, v, tofs, rtol=1e-11, *, events=None, f=func_twobody):
         rrs.append(y[:3])
         vvs.append(y[3:])
 
-    return rrs * u.km, vvs * u.km / u.s
+    return rrs * u.au, vvs * u.au / u.s
 
 
 def farnocchia(k, r, v, tofs, **kwargs):
@@ -147,15 +147,15 @@ def farnocchia(k, r, v, tofs, **kwargs):
         Propagated velocity vectors.
 
     """
-    k = k.to_value(u.km ** 3 / u.s ** 2)
-    r0 = r.to_value(u.km)
-    v0 = v.to_value(u.km / u.s)
+    k = k.to_value(u.au ** 3 / u.s ** 2)
+    r0 = r.to_value(u.au)
+    v0 = v.to_value(u.au / u.s)
     tofs = tofs.to_value(u.s)
 
     results = np.array([farnocchia_fast(k, r0, v0, tof) for tof in tofs])
     return (
-        results[:, 0] << u.km,
-        results[:, 1] << u.km / u.s,
+        results[:, 0] << u.au,
+        results[:, 1] << u.au / u.s,
     )
 
 
@@ -195,15 +195,15 @@ def vallado(k, r, v, tofs, numiter=350, **kwargs):
     and 85 % faster.
 
     """
-    k = k.to_value(u.km ** 3 / u.s ** 2)
-    r0 = r.to_value(u.km)
-    v0 = v.to_value(u.km / u.s)
+    k = k.to_value(u.au ** 3 / u.s ** 2)
+    r0 = r.to_value(u.au)
+    v0 = v.to_value(u.au / u.s)
     tofs = tofs.to_value(u.s)
 
     results = np.array([_kepler(k, r0, v0, tof, numiter=numiter) for tof in tofs])
     return (
-        results[:, 0] << u.km,
-        results[:, 1] << u.km / u.s,
+        results[:, 0] << u.au,
+        results[:, 1] << u.au / u.s,
     )
 
 

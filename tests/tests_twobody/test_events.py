@@ -26,20 +26,20 @@ from poliastro.twobody.propagation import cowell
 @pytest.mark.slow
 def test_altitude_crossing():
     # Test decreasing altitude cross over Earth. No analytic solution.
-    R = Earth.R.to(u.km).value
+    R = Earth.R.to(u.au).value
 
-    orbit = Orbit.circular(Earth, 230 * u.km)
+    orbit = Orbit.circular(Earth, 230 * u.au)
     t_flight = 48.209538 * u.d
 
     # Parameters of a body
     C_D = 2.2  # Dimensionless (any value would do)
     A_over_m = ((np.pi / 4.0) * (u.m ** 2) / (100 * u.kg)).to_value(
-        u.km ** 2 / u.kg
+        u.au ** 2 / u.kg
     )  # km^2/kg
 
     # Parameters of the atmosphere
-    rho0 = rho0_earth.to(u.kg / u.km ** 3).value  # kg/km^3
-    H0 = H0_earth.to(u.km).value  # km
+    rho0 = rho0_earth.to(u.kg / u.au ** 3).value  # kg/km^3
+    H0 = H0_earth.to(u.au).value  # km
 
     tofs = [50] * u.d
 
@@ -64,14 +64,14 @@ def test_altitude_crossing():
         f=f,
     )
 
-    assert_quantity_allclose(norm(rr[0].to(u.km).value) - thresh_alt, R)
+    assert_quantity_allclose(norm(rr[0].to(u.au).value) - thresh_alt, R)
     assert_quantity_allclose(altitude_cross_event.last_t, t_flight, rtol=1e-2)
 
 
 def test_altitude_cross_not_happening_is_ok():
-    R = Earth.R.to(u.km).value
+    R = Earth.R.to(u.au).value
 
-    orbit = Orbit.circular(Earth, 230 * u.km)
+    orbit = Orbit.circular(Earth, 230 * u.au)
 
     tofs = [25] * u.d
 
@@ -91,8 +91,8 @@ def test_altitude_cross_not_happening_is_ok():
 
 
 def test_latitude_cross_event():
-    r = [-6142438.668, 3492467.56, -25767.257] << u.km
-    v = [505.848, 942.781, 7435.922] << u.km / u.s
+    r = [-6142438.668, 3492467.56, -25767.257] << u.au
+    v = [505.848, 942.781, 7435.922] << u.au / u.s
     orbit = Orbit.from_vectors(Earth, r, v)
 
     thresh_lat = 60 * u.deg
@@ -118,7 +118,7 @@ def test_penumbra_event_not_triggering_is_ok():
     tof = 100 * u.s
     r0 = np.array([281.89, 1411.473, 750.672])
     v0 = np.array([7.36138, 2.98997, 1.64354])
-    orbit = Orbit.from_vectors(attractor, r0 * u.km, v0 * u.km / u.s)
+    orbit = Orbit.from_vectors(attractor, r0 * u.au, v0 * u.au / u.s)
 
     penumbra_event = PenumbraEvent(orbit)
     events = [penumbra_event]
@@ -139,7 +139,7 @@ def test_umbra_event_not_triggering_is_ok():
     tof = 100 * u.s
     r0 = np.array([281.89, 1411.473, 750.672])
     v0 = np.array([7.36138, 2.98997, 1.64354])
-    orbit = Orbit.from_vectors(attractor, r0 * u.km, v0 * u.km / u.s)
+    orbit = Orbit.from_vectors(attractor, r0 * u.au, v0 * u.au / u.s)
 
     umbra_event = UmbraEvent(orbit)
     events = [umbra_event]
@@ -215,8 +215,8 @@ def test_penumbra_event_crossing():
 
 def test_node_cross_event():
     t_node = 3.46524036 * u.s
-    r = [-6142438.668, 3492467.56, -25767.257] << u.km
-    v = [505.848, 942.781, 7435.922] << u.km / u.s
+    r = [-6142438.668, 3492467.56, -25767.257] << u.au
+    v = [505.848, 942.781, 7435.922] << u.au / u.s
     orbit = Orbit.from_vectors(Earth, r, v)
 
     node_event = NodeCrossEvent(terminal=True)
@@ -240,7 +240,7 @@ def test_node_event_equatorial_orbit():
 
     r = np.array([9946.2, 1035.4, 0.0])
     v = np.array([7.0, -0.1, 0.0])
-    orb = Orbit.from_vectors(Earth, r * u.km, v * u.km / u.s)
+    orb = Orbit.from_vectors(Earth, r * u.au, v * u.au / u.s)
 
     tofs = [5, 10, 50] << u.s
     rr, vv = cowell(
@@ -255,8 +255,8 @@ def test_node_event_equatorial_orbit():
 
 
 def test_orbit_propagation_continues_if_events_terminal_is_False():
-    r = [-6142438.668, 3492467.56, -25767.257] << u.km
-    v = [505.848, 942.781, 7435.922] << u.km / u.s
+    r = [-6142438.668, 3492467.56, -25767.257] << u.au
+    v = [505.848, 942.781, 7435.922] << u.au / u.s
     orbit = Orbit.from_vectors(Earth, r, v)
 
     thresh_lat = 60 * u.deg
@@ -279,8 +279,8 @@ def test_orbit_propagation_continues_if_events_terminal_is_False():
 
 
 def test_orbit_propagation_position_vector_does_not_repeat_if_events_terminal_is_True():
-    r = [-6142438.668, 3492467.56, -25767.257] << u.km
-    v = [505.848, 942.781, 7435.922] << u.km / u.s
+    r = [-6142438.668, 3492467.56, -25767.257] << u.au
+    v = [505.848, 942.781, 7435.922] << u.au / u.s
     orbit = Orbit.from_vectors(Earth, r, v)
 
     thresh_lat = 60 * u.deg
@@ -356,10 +356,10 @@ def test_propagation_stops_if_atleast_one_event_has_terminal_set_to_True(
 
 def test_line_of_sight():
     # From Vallado example 5.6
-    r1 = np.array([0, -4464.696, -5102.509]) << u.km
-    r2 = np.array([0, 5740.323, 3189.068]) << u.km
-    r_sun = np.array([122233179, -76150708, 33016374]) << u.km
-    R = Earth.R.to(u.km).value
+    r1 = np.array([0, -4464.696, -5102.509]) << u.au
+    r2 = np.array([0, 5740.323, 3189.068]) << u.au
+    r_sun = np.array([122233179, -76150708, 33016374]) << u.au
+    R = Earth.R.to(u.au).value
 
     los = line_of_sight(r1.value, r2.value, R)
     los_with_sun = line_of_sight(r1.value, r_sun.value, R)
@@ -369,8 +369,8 @@ def test_line_of_sight():
 
 
 def test_LOS_event_raises_warning_if_norm_of_r1_less_than_attractor_radius_during_propagation():
-    r2 = np.array([-500, 1500, 4012.09]) << u.km
-    v2 = np.array([5021.38, -2900.7, 1000.354]) << u.km / u.s
+    r2 = np.array([-500, 1500, 4012.09]) << u.au
+    v2 = np.array([5021.38, -2900.7, 1000.354]) << u.au / u.s
     orbit = Orbit.from_vectors(Earth, r2, v2)
 
     tofs = [100, 500, 1000, 2000] << u.s
@@ -384,9 +384,9 @@ def test_LOS_event_raises_warning_if_norm_of_r1_less_than_attractor_radius_durin
     pos_coords = rr  # Trajectory of the secondary body.
 
     r1 = (
-        np.array([0, -5010.696, -5102.509]) << u.km
+        np.array([0, -5010.696, -5102.509]) << u.au
     )  # This position vectors' norm gets less than attractor radius.
-    v1 = np.array([736.138, 29899.7, 164.354]) << u.km / u.s
+    v1 = np.array([736.138, 29899.7, 164.354]) << u.au / u.s
     orb = Orbit.from_vectors(Earth, r1, v1)
 
     los_event = LosEvent(Earth, pos_coords, terminal=True)
@@ -405,8 +405,8 @@ def test_LOS_event_raises_warning_if_norm_of_r1_less_than_attractor_radius_durin
 
 @pytest.mark.filterwarnings("ignore::UserWarning")
 def test_LOS_event_with_lithobrake_event_raises_warning_when_satellite_cuts_attractor():
-    r2 = np.array([-500, 1500, 4012.09]) << u.km
-    v2 = np.array([5021.38, -2900.7, 1000.354]) << u.km / u.s
+    r2 = np.array([-500, 1500, 4012.09]) << u.au
+    v2 = np.array([5021.38, -2900.7, 1000.354]) << u.au / u.s
     orbit = Orbit.from_vectors(Earth, r2, v2)
 
     tofs = [100, 500, 1000, 2000] << u.s
@@ -419,14 +419,14 @@ def test_LOS_event_with_lithobrake_event_raises_warning_when_satellite_cuts_attr
     )
     pos_coords = rr  # Trajectory of the secondary body.
 
-    r1 = np.array([0, -5010.696, -5102.509]) << u.km
-    v1 = np.array([736.138, 2989.7, 164.354]) << u.km / u.s
+    r1 = np.array([0, -5010.696, -5102.509]) << u.au
+    v1 = np.array([736.138, 2989.7, 164.354]) << u.au / u.s
     orb = Orbit.from_vectors(Earth, r1, v1)
 
     los_event = LosEvent(Earth, pos_coords, terminal=True)
     tofs = [0.003, 0.004, 0.01, 0.02, 0.03, 0.04, 0.07, 0.1, 0.2, 0.3, 0.4, 1, 3] << u.s
 
-    lithobrake_event = LithobrakeEvent(Earth.R.to_value(u.km))
+    lithobrake_event = LithobrakeEvent(Earth.R.to_value(u.au))
     events = [lithobrake_event, los_event]
     r, v = cowell(
         Earth.k,
@@ -441,8 +441,8 @@ def test_LOS_event_with_lithobrake_event_raises_warning_when_satellite_cuts_attr
 
 def test_LOS_event():
     t_los = 2327.165 * u.s
-    r2 = np.array([-500, 1500, 4012.09]) << u.km
-    v2 = np.array([5021.38, -2900.7, 1000.354]) << u.km / u.s
+    r2 = np.array([-500, 1500, 4012.09]) << u.au
+    v2 = np.array([5021.38, -2900.7, 1000.354]) << u.au / u.s
     orbit = Orbit.from_vectors(Earth, r2, v2)
 
     tofs = [100, 500, 1000, 2000] << u.s
@@ -456,7 +456,7 @@ def test_LOS_event():
     pos_coords = rr  # Trajectory of the secondary body.
 
     orb = Orbit.from_classical(
-        Earth, 16000 * u.km, 0.53 * u.one, 5 * u.deg, 5 * u.deg, 10 * u.deg, 30 * u.deg
+        Earth, 16000 * u.au, 0.53 * u.one, 5 * u.deg, 5 * u.deg, 10 * u.deg, 30 * u.deg
     )
 
     los_event = LosEvent(Earth, pos_coords, terminal=True)

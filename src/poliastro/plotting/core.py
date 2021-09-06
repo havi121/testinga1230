@@ -159,18 +159,18 @@ class OrbitPlotter3D(_PlotlyOrbitPlotter):
         if dark:
             self._layout.template = "plotly_dark"
 
-    def _draw_point(self, radius, color, name, center=[0, 0, 0] * u.km):
+    def _draw_point(self, radius, color, name, center=[0, 0, 0] * u.au):
         # We use _plot_sphere here because it's not easy to specify the size of a marker
         # in data units instead of pixels, see
         # https://stackoverflow.com/q/47086547
         return self._draw_sphere(radius, color, name, center)
 
-    def _draw_sphere(self, radius, color, name, center=[0, 0, 0] * u.km):
+    def _draw_sphere(self, radius, color, name, center=[0, 0, 0] * u.au):
         xx, yy, zz = generate_sphere(radius, center)
         sphere = Surface(
-            x=xx.to(u.km).value,
-            y=yy.to(u.km).value,
-            z=zz.to(u.km).value,
+            x=xx.to(u.au).value,
+            y=yy.to(u.au).value,
+            z=zz.to(u.au).value,
             name=name,
             colorscale=[[0, color], [1, color]],
             cauto=False,
@@ -184,9 +184,9 @@ class OrbitPlotter3D(_PlotlyOrbitPlotter):
 
     def _plot_coordinates(self, coordinates, label, colors, dashed):
         trace = Scatter3d(
-            x=coordinates.x.to(u.km).value,
-            y=coordinates.y.to(u.km).value,
-            z=coordinates.z.to(u.km).value,
+            x=coordinates.x.to(u.au).value,
+            y=coordinates.y.to(u.au).value,
+            z=coordinates.z.to(u.au).value,
             name=label,
             line=dict(color=colors[0], width=5, dash="dash" if dashed else "solid"),
             mode="lines",  # Boilerplate
@@ -215,8 +215,8 @@ class OrbitPlotter3D(_PlotlyOrbitPlotter):
 
         return super().plot(orbit, label=label, color=color, trail=trail)
 
-    @u.quantity_input(elev=u.rad, azim=u.rad, distance=u.km)
-    def set_view(self, elev, azim, distance=5 * u.km):
+    @u.quantity_input(elev=u.rad, azim=u.rad, distance=u.au)
+    def set_view(self, elev, azim, distance=5 * u.au):
         """Changes 3D view."""
         x = distance * np.cos(elev) * np.cos(azim)
         y = distance * np.cos(elev) * np.sin(azim)
@@ -227,9 +227,9 @@ class OrbitPlotter3D(_PlotlyOrbitPlotter):
                 "scene": {
                     "camera": {
                         "eye": {
-                            "x": x.to(u.km).value,
-                            "y": y.to(u.km).value,
-                            "z": z.to(u.km).value,
+                            "x": x.to(u.au).value,
+                            "y": y.to(u.au).value,
+                            "z": z.to(u.au).value,
                         }
                     }
                 }
@@ -260,14 +260,14 @@ class OrbitPlotter2D(_PlotlyOrbitPlotter, Mixin2D):
     def _redraw(self):
         raise NotImplementedError("OrbitPlotter2D does not support reprojecting yet")
 
-    def _draw_point(self, radius, color, name, center=[0, 0, 0] * u.km):
+    def _draw_point(self, radius, color, name, center=[0, 0, 0] * u.au):
         x_center, y_center = self._project(
             center[None]
         )  # Indexing trick to add one extra dimension
 
         trace = Scatter(
-            x=x_center.to(u.km).value,
-            y=y_center.to(u.km).value,
+            x=x_center.to(u.au).value,
+            y=y_center.to(u.au).value,
             mode="markers",
             marker=dict(size=10, color=color),
             name=name,
@@ -276,7 +276,7 @@ class OrbitPlotter2D(_PlotlyOrbitPlotter, Mixin2D):
 
         return trace
 
-    def _draw_sphere(self, radius, color, name, center=[0, 0, 0] * u.km):
+    def _draw_sphere(self, radius, color, name, center=[0, 0, 0] * u.au):
         x_center, y_center = self._project(
             center[None]
         )  # Indexing trick to add one extra dimension
@@ -285,10 +285,10 @@ class OrbitPlotter2D(_PlotlyOrbitPlotter, Mixin2D):
             "type": "circle",
             "xref": "x",
             "yref": "y",
-            "x0": (x_center[0] - radius).to(u.km).value,
-            "y0": (y_center[0] - radius).to(u.km).value,
-            "x1": (x_center[0] + radius).to(u.km).value,
-            "y1": (y_center[0] + radius).to(u.km).value,
+            "x0": (x_center[0] - radius).to(u.au).value,
+            "y0": (y_center[0] - radius).to(u.au).value,
+            "x1": (x_center[0] + radius).to(u.au).value,
+            "y1": (y_center[0] + radius).to(u.au).value,
             "opacity": 1,
             "fillcolor": color,
             "line": {"color": color},
@@ -309,8 +309,8 @@ class OrbitPlotter2D(_PlotlyOrbitPlotter, Mixin2D):
         x, y = self._project(rr)
 
         trace = Scatter(
-            x=x.to(u.km).value,
-            y=y.to(u.km).value,
+            x=x.to(u.au).value,
+            y=y.to(u.au).value,
             name=label,
             line=dict(color=colors[0], width=2, dash="dash" if dashed else "solid"),
             hoverinfo="none",  # TODO: Review

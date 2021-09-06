@@ -11,7 +11,7 @@ def _segments_from_arrays(x, y):
     # Copied pasted from
     # https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/multicolored_line.html
     # because this API is impossible to understand
-    points = np.column_stack([x.to(u.km).value, y.to(u.km).value])[:, None, :]
+    points = np.column_stack([x.to(u.au).value, y.to(u.au).value])[:, None, :]
     segments = np.concatenate([points[:-1], points[1:]], axis=1)
     return segments
 
@@ -83,20 +83,20 @@ class StaticOrbitPlotter(BaseOrbitPlotter, Mixin2D):
         )  # Indexing trick to add one extra dimension
 
         (l,) = self._ax.plot(
-            x_center.to(u.km).value, y_center.to(u.km).value, "o", mew=0, color=color
+            x_center.to(u.au).value, y_center.to(u.au).value, "o", mew=0, color=color
         )
 
         return l
 
-    def _draw_sphere(self, radius, color, name, center=[0, 0, 0] * u.km):
+    def _draw_sphere(self, radius, color, name, center=[0, 0, 0] * u.au):
         x_center, y_center = self._project(
             center[None]
         )  # Indexing trick to add one extra dimension
 
         self._ax.add_patch(
             mpl_patches.Circle(
-                (x_center.to(u.km).value, y_center.to(u.km).value),
-                radius.to(u.km).value,
+                (x_center.to(u.au).value, y_center.to(u.au).value),
+                radius.to(u.au).value,
                 lw=0,
                 color=color,
             )
@@ -130,7 +130,7 @@ class StaticOrbitPlotter(BaseOrbitPlotter, Mixin2D):
 
         else:
             lines = self._ax.plot(
-                x.to(u.km).value, y.to(u.km).value, linestyle=linestyle, color=colors[0]
+                x.to(u.au).value, y.to(u.au).value, linestyle=linestyle, color=colors[0]
             )
 
         self._ax.set_xlabel("$x$ (km)")

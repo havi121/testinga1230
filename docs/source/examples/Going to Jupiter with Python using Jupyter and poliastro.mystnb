@@ -51,7 +51,7 @@ date_flyby = Time("2013-10-09 19:21", scale="utc").tdb
 date_arrival = Time("2016-07-05 03:18", scale="utc").tdb
 
 # Atlas V supplied a launch energy
-C_3 = 31.1 * u.km ** 2 / u.s ** 2
+C_3 = 31.1 * u.au ** 2 / u.s ** 2
 ```
 
 With previous dates we can create the different orbits that define the position of the Earth along the mission:
@@ -120,7 +120,7 @@ print("Final impulse:", imp_b)
 ```{code-cell} ipython3
 # Check the initial delta-V
 dv_a = imp_a[-1]
-norm(dv_a.to(u.km / u.s))
+norm(dv_a.to(u.au / u.s))
 ```
 
 We can now solve for the flyby orbit that will help Juno with the gravity assist. Again, the inner phase 2 maneuver is defined till Juno reaches Earth's position for the flyby date although the full orbit is plotted:

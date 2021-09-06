@@ -43,7 +43,7 @@ All that we must do is pass the two bodies, the two time spans and some extra pl
 
 * If we want poliastro to plot time of flight lines: `tfl=True/False`
 * If we want poliastro to plot arrival velocity: `vhp=True/False`
-* The maximum value for C3 to be ploted: `max_c3=45 * u.km**2 / u.s**2` (by default)
+* The maximum value for C3 to be ploted: `max_c3=45 * u.au**2 / u.s**2` (by default)
 
 ```{code-cell} ipython3
 :tags: [nbsphinx-thumbnail]

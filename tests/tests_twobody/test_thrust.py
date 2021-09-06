@@ -26,12 +26,12 @@ def test_leo_geo_numerical(inc_0):
     a_f = 42166.0  # km
     inc_f = 0.0  # rad
 
-    k = Earth.k.to(u.km ** 3 / u.s ** 2).value
+    k = Earth.k.to(u.au ** 3 / u.s ** 2).value
 
     a_d, _, t_f = change_a_inc(k, a_0, a_f, inc_0, inc_f, f)
 
     # Retrieve r and v from initial orbit
-    s0 = Orbit.circular(Earth, a_0 * u.km - Earth.R, inc_0 * u.rad)
+    s0 = Orbit.circular(Earth, a_0 * u.au - Earth.R, inc_0 * u.rad)
 
     # Propagate orbit
     def f_leo_geo(t0, u_, k):
@@ -42,7 +42,7 @@ def test_leo_geo_numerical(inc_0):
 
     sf = s0.propagate(t_f * u.s, method=cowell, f=f_leo_geo, rtol=1e-6)
 
-    assert_allclose(sf.a.to(u.km).value, a_f, rtol=1e-3)
+    assert_allclose(sf.a.to(u.au).value, a_f, rtol=1e-3)
     assert_allclose(sf.ecc.value, 0.0, atol=1e-2)
     assert_allclose(sf.inc.to(u.rad).value, inc_f, atol=2e-3)
 
@@ -51,13 +51,13 @@ def test_leo_geo_numerical(inc_0):
     "ecc_0,ecc_f", [[0.0, 0.1245], [0.1245, 0.0]]  # Reverse-engineered from results
 )
 def test_sso_disposal_time_and_delta_v(ecc_0, ecc_f):
-    a_0 = Earth.R.to(u.km).value + 900  # km
+    a_0 = Earth.R.to(u.au).value + 900  # km
     f = 2.4e-7  # km / s2, assumed constant
 
     expected_t_f = 29.697  # days, reverse-engineered
     expected_delta_V = 0.6158  # km / s, lower than actual result
     s0 = Orbit.from_classical(
-        Earth, a_0 * u.km, ecc_0 * u.one, 0 * u.deg, 0 * u.deg, 0 * u.deg, 0 * u.deg
+        Earth, a_0 * u.au, ecc_0 * u.one, 0 * u.deg, 0 * u.deg, 0 * u.deg, 0 * u.deg
     )
     _, delta_V, t_f = change_ecc_quasioptimal(s0, ecc_f, f)
 
@@ -69,12 +69,12 @@ def test_sso_disposal_time_and_delta_v(ecc_0, ecc_f):
     "ecc_0,ecc_f", [[0.0, 0.1245], [0.1245, 0.0]]  # Reverse-engineered from results
 )
 def test_sso_disposal_numerical(ecc_0, ecc_f):
-    a_0 = Earth.R.to(u.km).value + 900  # km
+    a_0 = Earth.R.to(u.au).value + 900  # km
     f = 2.4e-7  # km / s2, assumed constant
 
     # Retrieve r and v from initial orbit
     s0 = Orbit.from_classical(
-        Earth, a_0 * u.km, ecc_0 * u.one, 0 * u.deg, 0 * u.deg, 0 * u.deg, 0 * u.deg
+        Earth, a_0 * u.au, ecc_0 * u.one, 0 * u.deg, 0 * u.deg, 0 * u.deg, 0 * u.deg
     )
     a_d, _, t_f = change_ecc_quasioptimal(s0, ecc_f, f)
 
@@ -112,7 +112,7 @@ def test_geo_cases_beta_dnd_delta_v(ecc_0, inc_f, expected_beta, expected_delta_
 
     s0 = Orbit.from_classical(
         Earth,
-        a * u.km,
+        a * u.au,
         ecc_0 * u.one,
         inc_0 * u.deg,
         0 * u.deg,
@@ -137,7 +137,7 @@ def test_geo_cases_numerical(ecc_0, ecc_f):
     # Retrieve r and v from initial orbit
     s0 = Orbit.from_classical(
         Earth,
-        a * u.km,
+        a * u.au,
         ecc_0 * u.one,
         inc_0 * u.deg,
         0 * u.deg,
@@ -161,8 +161,8 @@ def test_geo_cases_numerical(ecc_0, ecc_f):
 
 def test_soyuz_standard_gto_delta_v():
     # Data from Soyuz Users Manual, issue 2 revision 0
-    r_a = (Earth.R + 35950 * u.km).to(u.km).value
-    r_p = (Earth.R + 250 * u.km).to(u.km).value
+    r_a = (Earth.R + 35950 * u.au).to(u.au).value
+    r_p = (Earth.R + 250 * u.au).to(u.au).value
 
     a = (r_a + r_p) / 2  # km
     ecc = r_a / a - 1
@@ -170,7 +170,7 @@ def test_soyuz_standard_gto_delta_v():
     argp_f = (178 * u.deg + 5 * u.deg).to(u.rad).value  # rad
     f = 2.4e-7  # km / s2
 
-    k = Earth.k.to(u.km ** 3 / u.s ** 2).value
+    k = Earth.k.to(u.au ** 3 / u.s ** 2).value
 
     _, delta_V, t_f = change_argp(k, a, ecc, argp_0, argp_f, f)
 
@@ -183,8 +183,8 @@ def test_soyuz_standard_gto_delta_v():
 
 def test_soyuz_standard_gto_numerical():
     # Data from Soyuz Users Manual, issue 2 revision 0
-    r_a = (Earth.R + 35950 * u.km).to(u.km).value
-    r_p = (Earth.R + 250 * u.km).to(u.km).value
+    r_a = (Earth.R + 35950 * u.au).to(u.au).value
+    r_p = (Earth.R + 250 * u.au).to(u.au).value
 
     a = (r_a + r_p) / 2  # km
     ecc = r_a / a - 1
@@ -192,14 +192,14 @@ def test_soyuz_standard_gto_numerical():
     argp_f = (178 * u.deg + 5 * u.deg).to(u.rad).value  # rad
     f = 2.4e-7  # km / s2
 
-    k = Earth.k.to(u.km ** 3 / u.s ** 2).value
+    k = Earth.k.to(u.au ** 3 / u.s ** 2).value
 
     a_d, _, t_f = change_argp(k, a, ecc, argp_0, argp_f, f)
 
     # Retrieve r and v from initial orbit
     s0 = Orbit.from_classical(
         Earth,
-        a * u.km,
+        a * u.au,
         (r_a / a - 1) * u.one,
         6 * u.deg,
         188.5 * u.deg,
@@ -233,7 +233,7 @@ def test_leo_geo_time_and_delta_v(inc_0, expected_t_f, expected_delta_V, rtol):
     a_0 = 7000.0  # km
     a_f = 42166.0  # km
     inc_f = 0.0  # rad
-    k = Earth.k.to(u.km ** 3 / u.s ** 2).value
+    k = Earth.k.to(u.au ** 3 / u.s ** 2).value
     inc_0 = np.radians(inc_0)  # rad
 
     _, delta_V, t_f = change_a_inc(k, a_0, a_f, inc_0, inc_f, f)

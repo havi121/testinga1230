@@ -146,9 +146,9 @@ class EclipseEvent(Event):
         self._primary_body = orbit.attractor
         self._secondary_body = orbit.attractor.parent
         self._epoch = orbit.epoch
-        self.k = self._primary_body.k.to_value(u.km ** 3 / u.s ** 2)
-        self.R_sec = self._secondary_body.R.to_value(u.km)
-        self.R_primary = self._primary_body.R.to_value(u.km)
+        self.k = self._primary_body.k.to_value(u.au ** 3 / u.s ** 2)
+        self.R_sec = self._secondary_body.R.to_value(u.au)
+        self.R_primary = self._primary_body.R.to_value(u.au)
 
     def __call__(self, t, u_, k):
         # Solve for primary and secondary bodies position w.r.t. solar system
@@ -157,7 +157,7 @@ class EclipseEvent(Event):
             get_body_barycentric_posvel(body.name, self._epoch + t * u.s)
             for body in (self._primary_body, self._secondary_body)
         ]
-        r_sec = ((r_secondary_wrt_ssb - r_primary_wrt_ssb).xyz << u.km).value
+        r_sec = ((r_secondary_wrt_ssb - r_primary_wrt_ssb).xyz << u.au).value
 
         return r_sec
 
@@ -264,11 +264,11 @@ class LosEvent(Event):
     def __init__(self, attractor, pos_coords, terminal=False, direction=0):
         super().__init__(terminal, direction)
         self._attractor = attractor
-        self._pos_coords = (pos_coords << u.km).value.tolist()
+        self._pos_coords = (pos_coords << u.au).value.tolist()
         self._last_coord = (
-            self._pos_coords[-1] << u.km
+            self._pos_coords[-1] << u.au
         ).value  # Used to prevent any errors if `self._pos_coords` gets exhausted early.
-        self._R = self._attractor.R.to_value(u.km)
+        self._R = self._attractor.R.to_value(u.au)
 
     def __call__(self, t, u_, k):
         self._last_t = t

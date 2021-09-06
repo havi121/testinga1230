@@ -12,11 +12,11 @@ def test_lagrange_points_vec():
     # Figure 2.36 from Curtis
 
     deg60 = 60 * pi / 180
-    expected_L1 = 326400 * ([1, 0, 0] * u.km)
-    expected_L2 = 449100 * ([1, 0, 0] * u.km)
-    expected_L3 = -381600 * ([1, 0, 0] * u.km)
-    expected_L4 = 384400 * ([cos(deg60), sin(deg60), 0] * u.km)
-    expected_L5 = 384400 * ([cos(deg60), -sin(deg60), 0] * u.km)
+    expected_L1 = 326400 * ([1, 0, 0] * u.au)
+    expected_L2 = 449100 * ([1, 0, 0] * u.au)
+    expected_L3 = -381600 * ([1, 0, 0] * u.au)
+    expected_L4 = 384400 * ([cos(deg60), sin(deg60), 0] * u.au)
+    expected_L5 = 384400 * ([cos(deg60), -sin(deg60), 0] * u.au)
 
     earth_mass = Earth.mass
     moon_mass = Moon.mass
@@ -27,9 +27,9 @@ def test_lagrange_points_vec():
 
     L1, L2, L3, L4, L5 = lagrange_points_vec(
         m1=earth_mass,
-        r1=([0, 0, 0] * u.km),
+        r1=([0, 0, 0] * u.au),
         m2=moon_mass,
-        r2=384400 * ([1, 0, 0] * u.km),
+        r2=384400 * ([1, 0, 0] * u.au),
         n=[0, 0, 1] * u.one,
     )
 

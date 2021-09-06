@@ -9,7 +9,7 @@ from poliastro.earth.atmosphere.jacchia import Jacchia77
 # https://ccmc.gsfc.nasa.gov/pub/modelweb/atmospheric/jacchia/jacchia-77/t1000.out
 jacchia77_solutions = {
     90
-    * u.km: [
+    * u.au: [
         188.0,
         19.746,
         19.170,
@@ -23,7 +23,7 @@ jacchia77_solutions = {
         -5.465,
     ],
     100
-    * u.km: [
+    * u.au: [
         193.7,
         18.971,
         18.323,
@@ -37,7 +37,7 @@ jacchia77_solutions = {
         -6.247,
     ],
     120
-    * u.km: [
+    * u.au: [
         350.5,
         17.578,
         16.637,
@@ -51,7 +51,7 @@ jacchia77_solutions = {
         -7.646,
     ],
     150
-    * u.km: [
+    * u.au: [
         669.8,
         16.476,
         15.412,
@@ -65,7 +65,7 @@ jacchia77_solutions = {
         -8.701,
     ],
     200
-    * u.km: [
+    * u.au: [
         884.4,
         15.501,
         14.315,
@@ -79,7 +79,7 @@ jacchia77_solutions = {
         -9.566,
     ],
     300
-    * u.km: [
+    * u.au: [
         975.1,
         14.049,
         12.663,
@@ -93,7 +93,7 @@ jacchia77_solutions = {
         -10.667,
     ],
     400
-    * u.km: [
+    * u.au: [
         991.7,
         12.733,
         11.161,
@@ -107,7 +107,7 @@ jacchia77_solutions = {
         -11.507,
     ],
     500
-    * u.km: [
+    * u.au: [
         996.4,
         11.472,
         9.722,
@@ -121,7 +121,7 @@ jacchia77_solutions = {
         -12.246,
     ],
     560
-    * u.km: [
+    * u.au: [
         997.64,
         10.7357,
         8.8803,
@@ -135,7 +135,7 @@ jacchia77_solutions = {
         -12.659,
     ],
     800
-    * u.km: [
+    * u.au: [
         999.33,
         7.9200,
         5.6641,
@@ -149,7 +149,7 @@ jacchia77_solutions = {
         -13.991,
     ],
     1000
-    * u.km: [
+    * u.au: [
         999.69,
         5.7162,
         3.1468,
@@ -163,7 +163,7 @@ jacchia77_solutions = {
         -14.547,
     ],
     1500
-    * u.km: [
+    * u.au: [
         999.92,
         0.6993,
         -2.5839,
@@ -177,7 +177,7 @@ jacchia77_solutions = {
         -15.260,
     ],
     2000
-    * u.km: [
+    * u.au: [
         999.97,
         -3.7167,
         -7.6281,
@@ -191,7 +191,7 @@ jacchia77_solutions = {
         -15.780,
     ],
     2400
-    * u.km: [
+    * u.au: [
         999.98,
         -6.8863,
         -9.9000,
@@ -269,7 +269,7 @@ def test_density(z):
 
 def test_outside_upper_limit_coesa76():
     with pytest.raises(ValueError) as excinfo:
-        alt = 2501.0 * u.km
+        alt = 2501.0 * u.au
         Texo = 1000 * u.K
         Jacchia77().altitude_profile(alt, Texo)
     assert (
@@ -280,7 +280,7 @@ def test_outside_upper_limit_coesa76():
 
 def test_outside_lower_limit_coesa76():
     with pytest.raises(ValueError) as excinfo:
-        alt = 89.0 * u.km
+        alt = 89.0 * u.au
         Texo = 1000 * u.K
         Jacchia77().altitude_profile(alt, Texo)
     assert (

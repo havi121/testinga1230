@@ -30,24 +30,24 @@ Earth.k
 ```
 
 ```{code-cell} ipython3
-ss_i = Orbit.circular(Earth, alt=800 * u.km)
+ss_i = Orbit.circular(Earth, alt=800 * u.au)
 ss_i
 ```
 
 ```{code-cell} ipython3
-r_i = ss_i.a.to(u.km)
+r_i = ss_i.a.to(u.au)
 r_i
 ```
 
 ```{code-cell} ipython3
-v_i_vec = ss_i.v.to(u.km / u.s)
+v_i_vec = ss_i.v.to(u.au / u.s)
 v_i = norm(v_i_vec)
 v_i
 ```
 
 ```{code-cell} ipython3
 N = 1000
-dv_a_vector = np.zeros(N) * u.km / u.s
+dv_a_vector = np.zeros(N) * u.au / u.s
 dv_b_vector = dv_a_vector.copy()
 r_f_vector = r_i * np.linspace(1, 100, num=N)
 for ii, r_f in enumerate(r_f_vector):

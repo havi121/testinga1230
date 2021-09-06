@@ -43,8 +43,8 @@ from poliastro.util import norm
 def halley():
     return Orbit.from_vectors(
         Sun,
-        [-9018878.63569932, -94116054.79839276, 22619058.69943215] * u.km,
-        [-49.95092305, -12.94843055, -4.29251577] * u.km / u.s,
+        [-9018878.63569932, -94116054.79839276, 22619058.69943215] * u.au,
+        [-49.95092305, -12.94843055, -4.29251577] * u.au / u.s,
     )
 
 
@@ -58,7 +58,7 @@ def test_elliptic_near_parabolic(ecc, propagator):
     _a = 0.0 * u.rad
     tof = 1.0 * u.min
     ss0 = Orbit.from_classical(
-        Earth, 10000 * u.km, ecc * u.one, _a, _a, _a, 1.0 * u.rad
+        Earth, 10000 * u.au, ecc * u.one, _a, _a, _a, 1.0 * u.rad
     )
 
     ss_cowell = ss0.propagate(tof, method=cowell)
@@ -78,7 +78,7 @@ def test_hyperbolic_near_parabolic(ecc, propagator):
     _a = 0.0 * u.rad
     tof = 1.0 * u.min
     ss0 = Orbit.from_classical(
-        Earth, -10000 * u.km, ecc * u.one, _a, _a, _a, 1.0 * u.rad
+        Earth, -10000 * u.au, ecc * u.one, _a, _a, _a, 1.0 * u.rad
     )
 
     ss_cowell = ss0.propagate(tof, method=cowell)
@@ -90,8 +90,8 @@ def test_hyperbolic_near_parabolic(ecc, propagator):
 
 @pytest.mark.parametrize("propagator", [markley])
 def test_near_equatorial(propagator):
-    r = [8.0e3, 1.0e3, 0.0] * u.km
-    v = [-0.5, -0.5, 0.0001] * u.km / u.s
+    r = [8.0e3, 1.0e3, 0.0] * u.au
+    v = [-0.5, -0.5, 0.0001] * u.au / u.s
     tof = 1.0 * u.h
     ss0 = Orbit.from_vectors(Earth, r, v)
 
@@ -105,10 +105,10 @@ def test_near_equatorial(propagator):
 @pytest.mark.parametrize("propagator", ALL_PROPAGATORS)
 def test_propagation(propagator):
     # Data from Vallado, example 2.4
-    r0 = [1131.340, -2282.343, 6672.423] * u.km
-    v0 = [-5.64305, 4.30333, 2.42879] * u.km / u.s
-    expected_r = [-4219.7527, 4363.0292, -3958.7666] * u.km
-    expected_v = [3.689866, -1.916735, -6.112511] * u.km / u.s
+    r0 = [1131.340, -2282.343, 6672.423] * u.au
+    v0 = [-5.64305, 4.30333, 2.42879] * u.au / u.s
+    expected_r = [-4219.7527, 4363.0292, -3958.7666] * u.au
+    expected_v = [3.689866, -1.916735, -6.112511] * u.au / u.s
 
     ss0 = Orbit.from_vectors(Earth, r0, v0)
     tof = 40 * u.min
@@ -122,7 +122,7 @@ def test_propagation(propagator):
 
 def test_propagating_to_certain_nu_is_correct():
     # Take an elliptic orbit
-    a = 1.0 * u.AU
+    a = 1.0 * u.au
     ecc = 1.0 / 3.0 * u.one
     _a = 0.0 * u.rad
     nu = 10 * u.deg
@@ -150,8 +150,8 @@ def test_propagating_to_certain_nu_is_correct():
 
 
 def test_propagate_to_anomaly_in_the_past_fails_for_open_orbits():
-    r0 = [Earth.R.to(u.km).value + 300, 0, 0] * u.km
-    v0 = [0, 15, 0] * u.km / u.s
+    r0 = [Earth.R.to(u.au).value + 300, 0, 0] * u.au
+    v0 = [0, 15, 0] * u.au / u.s
     orb = Orbit.from_vectors(Earth, r0, v0)
 
     with pytest.raises(ValueError, match="True anomaly -0.02 rad not reachable"):
@@ -160,10 +160,10 @@ def test_propagate_to_anomaly_in_the_past_fails_for_open_orbits():
 
 def test_propagate_accepts_timedelta():
     # Data from Vallado, example 2.4
-    r0 = [1131.340, -2282.343, 6672.423] * u.km
-    v0 = [-5.64305, 4.30333, 2.42879] * u.km / u.s
-    expected_r = [-4219.7527, 4363.0292, -3958.7666] * u.km
-    expected_v = [3.689866, -1.916735, -6.112511] * u.km / u.s
+    r0 = [1131.340, -2282.343, 6672.423] * u.au
+    v0 = [-5.64305, 4.30333, 2.42879] * u.au / u.s
+    expected_r = [-4219.7527, 4363.0292, -3958.7666] * u.au
+    expected_v = [3.689866, -1.916735, -6.112511] * u.au / u.s
 
     ss0 = Orbit.from_vectors(Earth, r0, v0)
     tof = time.TimeDelta(40 * u.min)
@@ -177,10 +177,10 @@ def test_propagate_accepts_timedelta():
 
 def test_propagation_hyperbolic():
     # Data from Curtis, example 3.5
-    r0 = [Earth.R.to(u.km).value + 300, 0, 0] * u.km
-    v0 = [0, 15, 0] * u.km / u.s
-    expected_r_norm = 163180 * u.km
-    expected_v_norm = 10.51 * u.km / u.s
+    r0 = [Earth.R.to(u.au).value + 300, 0, 0] * u.au
+    v0 = [0, 15, 0] * u.au / u.s
+    expected_r_norm = 163180 * u.au
+    expected_v_norm = 10.51 * u.au / u.s
 
     ss0 = Orbit.from_vectors(Earth, r0, v0)
     tof = 14941 * u.s
@@ -198,27 +198,27 @@ def test_propagation_parabolic(propagator):
     if propagator in [mikkola, gooding]:
         pytest.skip()
 
-    p = 2.0 * 6600 * u.km
+    p = 2.0 * 6600 * u.au
     _a = 0.0 * u.deg
     orbit = Orbit.parabolic(Earth, p, _a, _a, _a, _a)
     orbit = orbit.propagate(0.8897 / 2.0 * u.h, method=propagator)
 
     _, _, _, _, _, nu0 = rv2coe(
-        Earth.k.to(u.km ** 3 / u.s ** 2).value,
-        orbit.r.to(u.km).value,
-        orbit.v.to(u.km / u.s).value,
+        Earth.k.to(u.au ** 3 / u.s ** 2).value,
+        orbit.r.to(u.au).value,
+        orbit.v.to(u.au / u.s).value,
     )
     assert_quantity_allclose(nu0, np.deg2rad(90.0), rtol=1e-4)
 
     orbit = Orbit.parabolic(Earth, p, _a, _a, _a, _a)
     orbit = orbit.propagate(36.0 * u.h, method=propagator)
-    assert_quantity_allclose(norm(orbit.r), 304700.0 * u.km, rtol=1e-4)
+    assert_quantity_allclose(norm(orbit.r), 304700.0 * u.au, rtol=1e-4)
 
 
 def test_propagation_zero_time_returns_same_state():
     # Bug #50
-    r0 = [1131.340, -2282.343, 6672.423] * u.km  # type: u.Quantity
-    v0 = [-5.64305, 4.30333, 2.42879] * u.km / u.s
+    r0 = [1131.340, -2282.343, 6672.423] * u.au  # type: u.Quantity
+    v0 = [-5.64305, 4.30333, 2.42879] * u.au / u.s
     ss0 = Orbit.from_vectors(Earth, r0, v0)
     tof = 0 * u.s
 
@@ -233,7 +233,7 @@ def test_propagation_zero_time_returns_same_state():
 def test_propagation_hyperbolic_zero_time_returns_same_state():
     ss0 = Orbit.from_classical(
         Earth,
-        -27112.5464 * u.km,
+        -27112.5464 * u.au,
         1.25 * u.one,
         0 * u.deg,
         0 * u.deg,
@@ -247,33 +247,33 @@ def test_propagation_hyperbolic_zero_time_returns_same_state():
 
     r, v = ss1.rv()
 
-    assert_quantity_allclose(r, r0, atol=1e-24 * u.km)
-    assert_quantity_allclose(v, v0, atol=1e-27 * u.km / u.s)
+    assert_quantity_allclose(r, r0, atol=1e-24 * u.au)
+    assert_quantity_allclose(v, v0, atol=1e-27 * u.au / u.s)
 
 
 def test_apply_zero_maneuver_returns_equal_state():
-    _d = 1.0 * u.AU  # Unused distance
+    _d = 1.0 * u.au  # Unused distance
     _ = 0.5 * u.one  # Unused dimensionless value
     _a = 1.0 * u.deg  # Unused angle
     ss = Orbit.from_classical(Sun, _d, _, _a, _a, _a, _a)
     dt = 0 * u.s
-    dv = [0, 0, 0] * u.km / u.s
+    dv = [0, 0, 0] * u.au / u.s
     orbit_new = ss.apply_maneuver([(dt, dv)])
-    assert_allclose(orbit_new.r.to(u.km).value, ss.r.to(u.km).value)
-    assert_allclose(orbit_new.v.to(u.km / u.s).value, ss.v.to(u.km / u.s).value)
+    assert_allclose(orbit_new.r.to(u.au).value, ss.r.to(u.au).value)
+    assert_allclose(orbit_new.v.to(u.au / u.s).value, ss.v.to(u.au / u.s).value)
 
 
 def test_cowell_propagation_with_zero_acceleration_equals_kepler():
     # Data from Vallado, example 2.4
 
-    r0 = np.array([1131.340, -2282.343, 6672.423]) * u.km
-    v0 = np.array([-5.64305, 4.30333, 2.42879]) * u.km / u.s
+    r0 = np.array([1131.340, -2282.343, 6672.423]) * u.au
+    v0 = np.array([-5.64305, 4.30333, 2.42879]) * u.au / u.s
     tofs = [40 * 60.0] * u.s
 
     orbit = Orbit.from_vectors(Earth, r0, v0)
 
-    expected_r = np.array([-4219.7527, 4363.0292, -3958.7666]) * u.km
-    expected_v = np.array([3.689866, -1.916735, -6.112511]) * u.km / u.s
+    expected_r = np.array([-4219.7527, 4363.0292, -3958.7666]) * u.au
+    expected_v = np.array([3.689866, -1.916735, -6.112511]) * u.au / u.s
 
     r, v = cowell(Earth.k, orbit.r, orbit.v, tofs)
 
@@ -297,7 +297,7 @@ def test_cowell_propagation_circle_to_circle():
 
         return du_kep + du_ad
 
-    ss = Orbit.circular(Earth, 500 * u.km)
+    ss = Orbit.circular(Earth, 500 * u.au)
     tofs = [20] * ss.period
 
     r, v = cowell(Earth.k, ss.r, ss.v, tofs, f=f)
@@ -309,19 +309,19 @@ def test_cowell_propagation_circle_to_circle():
     assert_quantity_allclose(da_a0, 2 * dv_v0, rtol=1e-2)
 
     dv = abs(norm(ss_final.v) - norm(ss.v))
-    accel_dt = accel * u.km / u.s ** 2 * tofs[0]
+    accel_dt = accel * u.au / u.s ** 2 * tofs[0]
     assert_quantity_allclose(dv, accel_dt, rtol=1e-2)
 
 
 def test_propagate_to_date_has_proper_epoch():
     # Data from Vallado, example 2.4
-    r0 = [1131.340, -2282.343, 6672.423] * u.km
-    v0 = [-5.64305, 4.30333, 2.42879] * u.km / u.s
+    r0 = [1131.340, -2282.343, 6672.423] * u.au
+    v0 = [-5.64305, 4.30333, 2.42879] * u.au / u.s
     init_epoch = J2000
     final_epoch = time.Time("2000-01-01 12:40:00", scale="tdb")
 
-    expected_r = [-4219.7527, 4363.0292, -3958.7666] * u.km
-    expected_v = [3.689866, -1.916735, -6.112511] * u.km / u.s
+    expected_r = [-4219.7527, 4363.0292, -3958.7666] * u.au
+    expected_v = [3.689866, -1.916735, -6.112511] * u.au / u.s
 
     ss0 = Orbit.from_vectors(Earth, r0, v0, epoch=init_epoch)
     ss1 = ss0.propagate(final_epoch)
@@ -364,7 +364,7 @@ def test_long_propagations_vallado_agrees_farnocchia():
 
     r_halleys = [-9018878.63569932, -94116054.79839276, 22619058.69943215]  # km
     v_halleys = [-49.95092305, -12.94843055, -4.29251577]  # km/s
-    halleys = Orbit.from_vectors(Sun, r_halleys * u.km, v_halleys * u.km / u.s)
+    halleys = Orbit.from_vectors(Sun, r_halleys * u.au, v_halleys * u.au / u.s)
 
     r_mm, v_mm = halleys.propagate(tof, method=farnocchia).rv()
     r_k, v_k = halleys.propagate(tof, method=vallado).rv()
@@ -400,8 +400,8 @@ def test_long_propagation_preserves_orbit_elements(tof, method, halley):
 def test_propagation_sets_proper_epoch():
     expected_epoch = time.Time("2017-09-01 12:05:50", scale="tdb")
 
-    r = [-2.76132873e08, -1.71570015e08, -1.09377634e08] * u.km
-    v = [13.17478674, -9.82584125, -1.48126639] * u.km / u.s
+    r = [-2.76132873e08, -1.71570015e08, -1.09377634e08] * u.au
+    v = [13.17478674, -9.82584125, -1.48126639] * u.au / u.s
     florence = Orbit.from_vectors(Sun, r, v, plane=Planes.EARTH_ECLIPTIC)
 
     propagated = florence.propagate(expected_epoch)
@@ -411,7 +411,7 @@ def test_propagation_sets_proper_epoch():
 
 def test_sample_custom_body_raises_warning_and_returns_coords():
     # See https://github.com/poliastro/poliastro/issues/649
-    orbit = Orbit.circular(Moon, 100 * u.km)
+    orbit = Orbit.circular(Moon, 100 * u.au)
 
     coords = orbit.sample(10)
 
@@ -421,7 +421,7 @@ def test_sample_custom_body_raises_warning_and_returns_coords():
 
 def test_propagation_custom_body_works():
     # See https://github.com/poliastro/poliastro/issues/649
-    orbit = Orbit.circular(Moon, 100 * u.km)
+    orbit = Orbit.circular(Moon, 100 * u.au)
     orbit.propagate(1 * u.h)
 
 
@@ -436,14 +436,14 @@ def test_propagate_with_coe(propagator_coe):
     p = a * (1 - ecc ** 2)
 
     # Delete the units
-    p = p.to_value(u.km)
+    p = p.to_value(u.au)
     ecc = ecc.value
     period = period.to_value(u.s)
     inc = inc.to_value(u.rad)
     raan = raan.to_value(u.rad)
     argp = argp.to_value(u.rad)
     nu = nu.to_value(u.rad)
-    k = iss.attractor.k.to_value(u.km ** 3 / u.s ** 2)
+    k = iss.attractor.k.to_value(u.au ** 3 / u.s ** 2)
 
     nu_final = propagator_coe(k, p, ecc, inc, raan, argp, nu, period)
 
@@ -453,7 +453,7 @@ def test_propagate_with_coe(propagator_coe):
 @pytest.mark.parametrize("propagator", ALL_PROPAGATORS)
 def test_propagator_with_zero_eccentricity(propagator):
     attractor = Earth
-    altitude = 300 * u.km
+    altitude = 300 * u.au
     orbit = Orbit.circular(attractor, altitude)
     time_of_flight = 50 * u.s
     res = orbit.propagate(time_of_flight, method=propagator)
@@ -467,8 +467,8 @@ def test_propagator_with_zero_eccentricity(propagator):
 
 @pytest.mark.parametrize("propagator", ALL_PROPAGATORS)
 def test_after_propagation_r_and_v_dimensions(propagator):
-    r0 = [111.340, -228.343, 2413.423] * u.km
-    v0 = [-5.64305, 4.30333, 2.42879] * u.km / u.s
+    r0 = [111.340, -228.343, 2413.423] * u.au
+    v0 = [-5.64305, 4.30333, 2.42879] * u.au / u.s
     tof = time.TimeDelta(50 * u.s)
     orbit = Orbit.from_vectors(Earth, r0, v0)
 

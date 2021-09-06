@@ -85,7 +85,7 @@ tp = TisserandPlotter(axes=ax, kind=TisserandKind.ENERGY)
 
 # Plot Tisserand lines within 1km/s and 10km/s
 for planet in [Venus, Earth, Mars]:
-    ax = tp.plot(planet, (1, 14) * u.km / u.s, num_contours=14)
+    ax = tp.plot(planet, (1, 14) * u.au / u.s, num_contours=14)
     
 # Let us label previous figure
 tp.ax.text(0.70, -650, "Venus", color=BODY_COLORS["Venus"])
@@ -93,8 +93,8 @@ tp.ax.text(0.95, -500, "Earth", color=BODY_COLORS["Earth"])
 tp.ax.text(1.35, -350, "Mars", color=BODY_COLORS["Mars"])
 
 # Plot final desired path by making use of `plot_line` method
-ax = tp.plot_line(Venus, 7 * u.km / u.s, alpha_lim=(47 * np.pi / 180, 78 * np.pi / 180), color="black")
-ax = tp.plot_line(Mars, 5 * u.km / u.s, alpha_lim=(119 * np.pi / 180, 164 * np.pi / 180), color="black")
+ax = tp.plot_line(Venus, 7 * u.au / u.s, alpha_lim=(47 * np.pi / 180, 78 * np.pi / 180), color="black")
+ax = tp.plot_line(Mars, 5 * u.au / u.s, alpha_lim=(119 * np.pi / 180, 164 * np.pi / 180), color="black")
 ```
 
 Previous black lines represent an **EVME**, which means **Earth-Venus-Mars-Earth**. Our spacecraft starts at an orbit with $V_{\infty}=5$km/s at **Earth**'s location. At this point, a trajectory shared with a $V_{\infty}=7$km/s for **Venus** is shared. This new orbit would take us to a new orbit for $V_{\infty}=5$km/s around **Mars**, which is also intercepted at some point by **Earth** again.
@@ -137,17 +137,17 @@ ax.set_yscale("log")
 tp = TisserandPlotter(axes=ax, kind=TisserandKind.APSIS)
 
 # Show perfect circular orbits
-r = np.linspace(0, 10**2) * u.AU
+r = np.linspace(0, 10**2) * u.au
 tp.ax.plot(r,r, linestyle="--", color="red")
 
 # Generate lines for inner planets
 for planet in SS_BODIES_INNER:
-    tp.plot(planet, (1, 12) * u.km / u.s, num_contours=12)
+    tp.plot(planet, (1, 12) * u.au / u.s, num_contours=12)
     
 # Generate lines for outter planets
 for planet in SS_BODIES_OUTTER:
     if planet == Jupiter or planet == Saturn:
-        tp.plot(planet, (1, 7) * u.km / u.s, num_contours=7)
+        tp.plot(planet, (1, 7) * u.au / u.s, num_contours=7)
     else:
-        tp.plot(planet, (1, 5) * u.km / u.s, num_contours=10)
+        tp.plot(planet, (1, 5) * u.au / u.s, num_contours=10)
 ```

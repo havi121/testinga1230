@@ -19,8 +19,8 @@ class Maneuver:
     (changes in velocity) each one applied at a certain instant :math:`t_i`.
     You can access them directly indexing the ``Maneuver`` object itself.
 
-    >>> man = Maneuver((0 * u.s, [1, 0, 0] * u.km / u.s),
-    ... (10 * u.s, [1, 0, 0] * u.km / u.s))
+    >>> man = Maneuver((0 * u.s, [1, 0, 0] * u.au / u.s),
+    ... (10 * u.s, [1, 0, 0] * u.au / u.s))
     >>> man[0]
     (<Quantity 0. s>, <Quantity [1., 0., 0.] km / s>)
     >>> man.impulses[1]
@@ -205,10 +205,10 @@ class Maneuver:
     def get_total_cost(self):
         """Returns total cost of the maneuver."""
         dvs = [norm(dv) for dv in self._dvs]
-        return sum(dvs, 0 * u.km / u.s)
+        return sum(dvs, 0 * u.au / u.s)
 
     @classmethod
-    @u.quantity_input(max_delta_r=u.km)
+    @u.quantity_input(max_delta_r=u.au)
     def correct_pericenter(cls, orbit, max_delta_r):
         """Returns a Maneuver with the time before burning and the velocity vector in direction of the burn.
 
@@ -243,8 +243,8 @@ class Maneuver:
                 f"The correction maneuver is not yet supported with {orbit.ecc},it should be less than or equal to 0.001"
             )
 
-        R = orbit.attractor.R.to(u.km).value
-        k = orbit.attractor.k.to(u.km ** 3 / u.s ** 2).value
+        R = orbit.attractor.R.to(u.au).value
+        k = orbit.attractor.k.to(u.au ** 3 / u.s ** 2).value
         v = orbit.v.value
         a = orbit.a.value
         inc = orbit.inc.value
@@ -253,6 +253,6 @@ class Maneuver:
 
         delta_t, vf_ = correct_pericenter_fast(k, R, J2, max_delta_r, v, a, inc, ecc)
         delta_t = delta_t * u.s
-        vf_ = vf_ * u.km / u.s
+        vf_ = vf_ * u.au / u.s
 
         return cls((delta_t, vf_))

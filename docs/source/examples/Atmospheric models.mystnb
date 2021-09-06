@@ -62,7 +62,7 @@ atm_models = {coesa62: ["--r", "r", "Coesa 1962"], coesa76: ["-b", "b", "Coesa 1
 
 # Solve atmospheric temperature for each of the models
 for atm in atm_models:
-    z_span = np.linspace(0, 86, 100) * u.km
+    z_span = np.linspace(0, 86, 100) * u.au
     T_span = np.array([]) * u.K
     for z in z_span:
         # We discard density and pressure
@@ -123,7 +123,7 @@ fig.suptitle("State variables against altitude", fontweight="bold")
 fig.text(0.04, 0.5, 'Altitude [km]', va='center', rotation='vertical')
 
 # Complete altitude range and initialization of state variables sets
-alt_span = np.linspace(0, 1000, 1001) * u.km
+alt_span = np.linspace(0, 1000, 1001) * u.au
 T_span = np.array([]) * u.K
 p_span = np.array([]) * u.Pa
 rho_span = np.array([]) * u.kg / u.m ** 3

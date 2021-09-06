@@ -97,13 +97,13 @@ earth
 
 ```{code-cell} ipython3
 min_distance = norm(florence.rv(EPOCH)[0] - earth.rv(EPOCH)[0]) - Earth.R
-min_distance.to(u.km)
+min_distance.to(u.au)
 ```
 
 <div class="alert alert-success">This value is consistent with what ESA says! $7\,060\,160$ km</div>
 
 ```{code-cell} ipython3
-abs((min_distance - 7060160 * u.km) / (7060160 * u.km)).decompose()
+abs((min_distance - 7060160 * u.au) / (7060160 * u.au)).decompose()
 ```
 
 ```{code-cell} ipython3

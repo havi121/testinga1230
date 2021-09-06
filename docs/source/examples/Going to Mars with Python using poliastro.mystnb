@@ -98,7 +98,7 @@ plotter.plot_ephem(mars, date_arrival, label="Mars at arrival position")
 plotter.plot_trajectory(
     ss_trans.sample(max_anomaly=180 * u.deg), color="black", label="Transfer orbit"
 )
-plotter.set_view(30 * u.deg, 260 * u.deg, distance=3 * u.km)
+plotter.set_view(30 * u.deg, 260 * u.deg, distance=3 * u.au)
 ```
 
 Not bad! Let's celebrate with some music!

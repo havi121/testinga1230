@@ -231,8 +231,8 @@ def el2rv(inc, raan, ecc, argp, mean_anomaly, mean_motion, epoch):
     if errorCode != 0:
         raise RuntimeError(SGP4_ERRORS[errorCode])
 
-    pTEME = coord.CartesianRepresentation(rTEME * u.km)
-    vTEME = coord.CartesianDifferential(vTEME * u.km / u.s)
+    pTEME = coord.CartesianRepresentation(rTEME * u.au)
+    vTEME = coord.CartesianDifferential(vTEME * u.au / u.s)
     svTEME = TEME(pTEME.with_differentials(vTEME), obstime=epoch)
 
     svITRS = svTEME.transform_to(coord.ITRS(obstime=epoch))
@@ -314,8 +314,8 @@ if __name__ == "__main__":
         raise RuntimeError(SGP4_ERRORS[errorCode])
 
     # Convert state vector from TEME (True Equator Mean Equinox) to ITRS
-    pTEME = coord.CartesianRepresentation(rTEME * u.km)
-    vTEME = coord.CartesianDifferential(vTEME * u.km / u.s)
+    pTEME = coord.CartesianRepresentation(rTEME * u.au)
+    vTEME = coord.CartesianDifferential(vTEME * u.au / u.s)
     svTEME = TEME(pTEME.with_differentials(vTEME), obstime=iss.epoch)
     svITRS = svTEME.transform_to(coord.ITRS(obstime=iss.epoch))
     sv = Orbit.from_coords(Earth, svITRS)

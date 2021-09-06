@@ -113,15 +113,15 @@ class TisserandPlotter:
         # Plot desired kind lines
         if self.kind == TisserandKind.APSIS:
             # Generate apsis lines
-            lines = self.ax.plot(RR_A.to(u.AU), RR_P.to(u.AU), color=color)
+            lines = self.ax.plot(RR_A.to(u.au), RR_P.to(u.au), color=color)
         elif self.kind == TisserandKind.ENERGY:
             # Generate energy lines
             lines = self.ax.plot(
-                RR_P.to(u.AU), EE.to(u.km ** 2 / u.s ** 2), color=color
+                RR_P.to(u.au), EE.to(u.au ** 2 / u.s ** 2), color=color
             )
         elif self.kind == TisserandKind.PERIOD:
             # Generate period lines
-            lines = self.ax.plot(RR_P.to(u.AU), TT.to(u.year), color=color)
+            lines = self.ax.plot(RR_P.to(u.au), TT.to(u.year), color=color)
 
         return lines
 

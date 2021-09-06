@@ -64,17 +64,17 @@ from poliastro.constants import H0_earth, rho0_earth
 from poliastro.core.perturbations import atmospheric_drag_exponential
 from poliastro.core.propagation import func_twobody
 
-R = Earth.R.to_value(u.km)
+R = Earth.R.to_value(u.au)
 
 # Parameters of the body
 C_D = 2.2  # Dimensionless (any value would do)
 A_over_m = ((np.pi / 4.0) * (u.m ** 2) / (100 * u.kg)).to_value(
-    u.km ** 2 / u.kg
+    u.au ** 2 / u.kg
 )  # km^2/kg
 
 # Parameters of the atmosphere
-rho0 = rho0_earth.to_value(u.kg / u.km ** 3)  # kg/km^3
-H0 = H0_earth.to_value(u.km)  # km
+rho0 = rho0_earth.to_value(u.kg / u.au ** 3)  # kg/km^3
+H0 = H0_earth.to_value(u.au)  # km
 
 def f(t0, u_, k):
     du_kep = func_twobody(t0, u_, k)
@@ -89,7 +89,7 @@ We shall use the `cowell` propagator with the above perturbating conditions and 
 
 ```{code-cell} ipython3
 tofs = np.arange(0, 2400, 100) << u.s
-orbit = Orbit.circular(Earth, 150 * u.km)
+orbit = Orbit.circular(Earth, 150 * u.au)
 
 # Define a threshold altitude for crossing.
 thresh_alt = 50  # in km
@@ -111,7 +111,7 @@ print(f"The threshold altitude was crossed {altitude_cross_event.last_t} after t
 Let's see how did the orbit's altitude vary with time:
 
 ```{code-cell} ipython3
-altitudes = np.apply_along_axis(norm, 1, (rr << u.km).value) - Earth.R.to_value(u.km)
+altitudes = np.apply_along_axis(norm, 1, (rr << u.au).value) - Earth.R.to_value(u.au)
 plt.plot(tofs[:len(rr)].to_value(u.s), altitudes);
 plt.title("Altitude variation")
 plt.ylabel("Altitude (in km)");
@@ -126,7 +126,7 @@ Similar to the `AltitudeCrossEvent`, just pass the threshold latitude while inst
 
 ```{code-cell} ipython3
 orbit = Orbit.from_classical(
-    Earth, 6900 << u.km, 0.75 * u.one, 45 * u.deg, 0 * u.deg, 0 * u.deg, 130 * u.deg
+    Earth, 6900 << u.au, 0.75 * u.one, 45 * u.deg, 0 * u.deg, 0 * u.deg, 130 * u.deg
 )
 ```
 
@@ -212,7 +212,7 @@ attractor = Earth
 tof = 2 * u.d
 # Classical orbital elements
 coe = (
-    7000.137 * u.km,
+    7000.137 * u.au,
     0.009 * u.one,
     87.0 * u.deg,
     20.0 * u.deg,
@@ -244,17 +244,17 @@ print(f"The umbral shadow entry time was {umbra_event.last_t} after the orbit's 
 Let us plot the eclipse functions' variation with time.
 
 ```{code-cell} ipython3
-k = Earth.k.to_value(u.km ** 3 / u.s ** 2)
-R_sec = Sun.R.to_value(u.km)
-R_pri = Earth.R.to_value(u.km)
+k = Earth.k.to_value(u.au ** 3 / u.s ** 2)
+R_sec = Sun.R.to_value(u.au)
+R_pri = Earth.R.to_value(u.au)
 # Position vector of Sun wrt Solar System Barycenter
 r_sec_ssb = get_body_barycentric_posvel("Sun", orbit.epoch)[0]
 r_pri_ssb = get_body_barycentric_posvel("Earth", orbit.epoch)[0]
 
-r_sec = ((r_sec_ssb - r_pri_ssb).xyz << u.km).value
+r_sec = ((r_sec_ssb - r_pri_ssb).xyz << u.au).value
 
-rr = (rr << u.km).value
-vv = (vv << u.km / u.s).value
+rr = (rr << u.au).value
+vv = (vv << u.au / u.s).value
 
 eclipses = []  # List to store values of eclipse_function.
 for i in range(len(rr)):
@@ -283,7 +283,7 @@ plotter.plot(orbit)
 plotter.set_orbit_frame(orbit)
 
 # Convert satellite coordinates to a `CartesianRepresentation` object.
-coords = CartesianRepresentation(rr[:, 0] << u.km, rr[:, 1] << u.km, rr[:, 2] << u.km)
+coords = CartesianRepresentation(rr[:, 0] << u.au, rr[:, 1] << u.au, rr[:, 2] << u.au)
 plotter.plot_trajectory(coords, color="orange");
 ```
 
@@ -295,8 +295,8 @@ This event detector aims to check for ascending and descending node crossings. N
 yield inaccurate results if the orbit is near-equatorial.
 
 ```{code-cell} ipython3
-r = [-3182930.668, 94242.56, -85767.257] << u.km
-v = [505.848, 942.781, 7435.922] << u.km / u.s
+r = [-3182930.668, 94242.56, -85767.257] << u.au
+v = [505.848, 942.781, 7435.922] << u.au / u.s
 orbit = Orbit.from_vectors(Earth, r, v)
 ```
 
@@ -327,7 +327,7 @@ print(f"The nodal cross time was {node_event.last_t} after the orbit's epoch")
 The plot below shows us the variation of the z coordinate of the orbit's position vector with time:
 
 ```{code-cell} ipython3
-z_coords = [r[-1].to_value(u.km) for r in rr]
+z_coords = [r[-1].to_value(u.au) for r in rr]
 plt.xlabel("Time (s)")
 plt.ylabel("Z coordinate of the position vector")
 plt.title("Node Crossing")
@@ -372,8 +372,8 @@ Below, we show the case where `NodeCrossEvent` and `LatitudeCrossEvent` events a
 
 ```{code-cell} ipython3
 # NodeCrossEvent is detected earlier than the LatitudeCrossEvent.
-r = [-6142438.668, 3492467.56, -25767.257] << u.km
-v = [505.848, 942.781, 7435.922] << u.km / u.s
+r = [-6142438.668, 3492467.56, -25767.257] << u.au
+v = [505.848, 942.781, 7435.922] << u.au / u.s
 orbit = Orbit.from_vectors(Earth, r, v)
 
 # Node Cross event

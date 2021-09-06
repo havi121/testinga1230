@@ -34,8 +34,8 @@ position and velocity vectors we can use
 
 ```python
 # Data from Curtis, example 4.3
-r = [-6045, -3490, 2500] * u.km
-v = [-3.457, 6.618, 2.533] * u.km / u.s
+r = [-6045, -3490, 2500] * u.au
+v = [-3.457, 6.618, 2.533] * u.au / u.s
 
 orb = Orbit.from_vectors(Earth, r, v)
 ```
@@ -130,7 +130,7 @@ In this case, we'd use the method
 
 ```python
 # Data for Mars at J2000 from JPL HORIZONS
-a = 1.523679 * u.AU
+a = 1.523679 * u.au
 ecc = 0.093315 * u.one
 inc = 1.85 * u.deg
 raan = 49.562 * u.deg
@@ -205,8 +205,8 @@ thanks to Cowell\'s method:
 >>> import numpy as np
 >>> from poliastro.core.propagation import func_twobody
 >>> from poliastro.twobody.propagation import cowell
->>> r0 = [-2384.46, 5729.01, 3050.46] * u.km
->>> v0 = [-7.36138, -2.98997, 1.64354] * u.km / u.s
+>>> r0 = [-2384.46, 5729.01, 3050.46] * u.au
+>>> v0 = [-7.36138, -2.98997, 1.64354] * u.au / u.s
 >>> initial = Orbit.from_vectors(Earth, r0, v0)
 >>> @njit
 ... def accel(t0, state, k):
@@ -233,7 +233,7 @@ directly in this way. For instance, let us examine the effect of J2 perturbation
 >>> def f(t0, u_, k):
 ...     du_kep = func_twobody(t0, u_, k)
 ...     ax, ay, az = J2_perturbation(
-...         t0, u_, k, J2=Earth.J2.value, R=Earth.R.to(u.km).value
+...         t0, u_, k, J2=Earth.J2.value, R=Earth.R.to(u.au).value
 ...     )
 ...     du_ad = np.array([0, 0, 0, ax, ay, az])
 ...     return du_kep + du_ad
@@ -274,7 +274,7 @@ inclination:
 # Retrieve r and v from initial orbit
 >>> s0 = Orbit.from_classical(
 ...     Earth,
-...     a * u.km,
+...     a * u.au,
 ...     ecc_0 * u.one,
 ...     inc_0 * u.deg,
 ...     0 * u.deg,
@@ -338,10 +338,10 @@ time:
 ```
 
 ```python
->>> ss_i = Orbit.circular(Earth, alt=700 * u.km)
+>>> ss_i = Orbit.circular(Earth, alt=700 * u.au)
 >>> ss_i
 7078 x 7078 km x 0.0 deg (GCRS) orbit around Earth (♁)
->>> hoh = Maneuver.hohmann(ss_i, 36000 * u.km)
+>>> hoh = Maneuver.hohmann(ss_i, 36000 * u.au)
 >>> hoh.get_total_cost()
 <Quantity 3.6173981270031357 km / s>
 >>> hoh.get_total_time()
@@ -355,7 +355,7 @@ You can also retrieve the individual vectorial impulses:
 (<Quantity 0 s>, <Quantity [ 0.        , 2.19739818, 0.        ] km / s>)
 >>> hoh[0]  # Equivalent
 (<Quantity 0 s>, <Quantity [ 0.        , 2.19739818, 0.        ] km / s>)
->>> tuple(val.decompose([u.km, u.s]) for val in hoh[1])
+>>> tuple(val.decompose([u.au, u.s]) for val in hoh[1])
 (<Quantity 15729.741535747102 s>, <Quantity [ 0.        , 1.41999995, 0.        ] km / s>)
 ```
 ```{eval-rst}

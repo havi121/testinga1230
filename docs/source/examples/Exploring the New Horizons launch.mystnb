@@ -37,8 +37,8 @@ Quoting from "New Horizons Mission Design":
 of **perigee altitude 165 km** and **apogee altitude 215 km**. [Emphasis mine]
 
 ```{code-cell} ipython3
-r_p = Earth.R + 165 * u.km
-r_a = Earth.R + 215 * u.km
+r_p = Earth.R + 165 * u.au
+r_a = Earth.R + 215 * u.au
 
 a_parking = (r_p + r_a) / 2
 ecc_parking = 1 - r_p / a_parking
@@ -71,9 +71,9 @@ $$ v^2 = v_e^2 + v_{\infty}^2 $$
 ### Option a): Insert $C_3$ from report, check $v_e$ at parking perigee:
 
 ```{code-cell} ipython3
-C_3_A = 157.6561 * u.km ** 2 / u.s ** 2  # Designed
+C_3_A = 157.6561 * u.au ** 2 / u.s ** 2  # Designed
 
-a_exit = -(Earth.k / C_3_A).to(u.km)
+a_exit = -(Earth.k / C_3_A).to(u.au)
 ecc_exit = 1 - r_p / a_exit
 
 exit = Orbit.from_classical(
@@ -87,7 +87,7 @@ exit = Orbit.from_classical(
     time.Time("2006-01-19", scale="utc"),
 )
 
-norm(exit.v).to(u.km / u.s)
+norm(exit.v).to(u.au / u.s)
 ```
 
 Quoting "New Horizons Mission Design":
@@ -99,7 +99,7 @@ Earth departure speed, **estimated at 16.2 km/s**, becoming the fastest spacecra
 ever launched from Earth.  [Emphasis mine]
 
 ```{code-cell} ipython3
-v_estimated = 16.2 * u.km / u.s
+v_estimated = 16.2 * u.au / u.s
 
 print(
     "Relative error of {:.2f} %".format(
@@ -143,7 +143,7 @@ nh_r_f, v_jup = Ephem.from_body(Jupiter, nh_flyby_date).rv(nh_flyby_date)
 The hyperbolic excess velocity is measured with respect to the Earth:
 
 ```{code-cell} ipython3
-C_3_lambert = (norm(nh_v_0 - v_earth)).to(u.km / u.s) ** 2
+C_3_lambert = (norm(nh_v_0 - v_earth)).to(u.au / u.s) ** 2
 C_3_lambert
 ```
 

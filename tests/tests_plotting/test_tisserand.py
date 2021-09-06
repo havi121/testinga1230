@@ -25,7 +25,7 @@ def test_tisserand_plotting():
 
     # Plot Tisserand lines within 1km/s and 10km/s
     for planet in [Venus, Earth, Mars]:
-        ax = tp.plot(planet, (1, 14) * u.km / u.s, num_contours=14)
+        ax = tp.plot(planet, (1, 14) * u.au / u.s, num_contours=14)
 
     # Let us label previous figure
     tp.ax.text(0.70, -650, "Venus", color=BODY_COLORS["Venus"])

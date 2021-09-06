@@ -37,7 +37,7 @@ ELLIPTIC_ANGLES_DATA = [
 
 @pytest.fixture()
 def classical():
-    p = 11067.790  # u.km
+    p = 11067.790  # u.au
     ecc = 0.83285  # u.one
     inc = np.deg2rad(87.87)  # u.rad
     raan = np.deg2rad(227.89)  # u.rad
@@ -212,7 +212,7 @@ def test_eccentric_to_true_range(E, ecc):
 
 
 def test_convert_between_coe_and_rv_is_transitive(classical):
-    k = Earth.k.to(u.km ** 3 / u.s ** 2).value  # u.km**3 / u.s**2
+    k = Earth.k.to(u.au ** 3 / u.s ** 2).value  # u.au**3 / u.s**2
     res = rv2coe(k, *coe2rv(k, *classical))
     assert_allclose(res, classical)
 

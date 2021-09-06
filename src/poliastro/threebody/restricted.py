@@ -11,7 +11,7 @@ from scipy.optimize import brentq
 from poliastro.util import norm
 
 
-@u.quantity_input(r12=u.km, m1=u.kg, m2=u.kg)
+@u.quantity_input(r12=u.au, m1=u.kg, m2=u.kg)
 def lagrange_points(r12, m1, m2):
     """Computes the Lagrangian points of CR3BP.
 
@@ -70,7 +70,7 @@ def lagrange_points(r12, m1, m2):
     return lp * r12
 
 
-@u.quantity_input(m1=u.kg, r1=u.km, m2=u.kg, r2=u.km, n=u.one)
+@u.quantity_input(m1=u.kg, r1=u.au, m2=u.kg, r2=u.au, n=u.one)
 def lagrange_points_vec(m1, r1, m2, r2, n):
     """Computes the five Lagrange points in the CR3BP.
 

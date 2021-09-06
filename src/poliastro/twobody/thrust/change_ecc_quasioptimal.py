@@ -30,8 +30,8 @@ def change_ecc_quasioptimal(ss_0, ecc_f, f):
         Magnitude of constant acceleration
     """
     # We fix the inertial direction at the beginning
-    k = ss_0.attractor.k.to(u.km ** 3 / u.s ** 2).value
-    a = ss_0.a.to(u.km).value
+    k = ss_0.attractor.k.to(u.au ** 3 / u.s ** 2).value
+    a = ss_0.a.to(u.au).value
     ecc_0 = ss_0.ecc.value
     if ecc_0 > 0.001:  # Arbitrary tolerance
         ref_vec = ss_0.e_vec / ecc_0

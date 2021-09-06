@@ -45,21 +45,21 @@ pio.renderers.default = "plotly_mimetype+notebook_connected"
 The poliastro package now has several commonly used natural perturbations. One of them is atmospheric drag! See how one can monitor decay of the near-Earth orbit over time using our new module `poliastro.twobody.perturbations`!
 
 ```{code-cell} ipython3
-R = Earth.R.to(u.km).value
-k = Earth.k.to(u.km ** 3 / u.s ** 2).value
+R = Earth.R.to(u.au).value
+k = Earth.k.to(u.au ** 3 / u.s ** 2).value
 
-orbit = Orbit.circular(Earth, 250 * u.km, epoch=Time(0.0, format="jd", scale="tdb"))
+orbit = Orbit.circular(Earth, 250 * u.au, epoch=Time(0.0, format="jd", scale="tdb"))
 
 # parameters of a body
 C_D = 2.2  # dimentionless (any value would do)
 A_over_m = ((np.pi / 4.0) * (u.m ** 2) / (100 * u.kg)).to_value(
-    u.km ** 2 / u.kg
+    u.au ** 2 / u.kg
 )  # km^2/kg
 B = C_D * A_over_m
 
 # parameters of the atmosphere
-rho0 = rho0_earth.to(u.kg / u.km ** 3).value  # kg/km^3
-H0 = H0_earth.to(u.km).value
+rho0 = rho0_earth.to(u.kg / u.au ** 3).value  # kg/km^3
+H0 = H0_earth.to(u.au).value
 
 tofs = TimeDelta(np.linspace(0 * u.h, 100000 * u.s, num=2000))
 
@@ -108,7 +108,7 @@ of computations.
 ```{code-cell} ipython3
 from poliastro.twobody.events import LithobrakeEvent
 
-orbit = Orbit.circular(Earth, 230 * u.km, epoch=Time(0.0, format="jd", scale="tdb"))
+orbit = Orbit.circular(Earth, 230 * u.au, epoch=Time(0.0, format="jd", scale="tdb"))
 tofs = TimeDelta(np.linspace(0 * u.h, 100 * u.d, num=2000))
 
 lithobrake_event = LithobrakeEvent(R)
@@ -138,8 +138,8 @@ plt.plot(tofs[:len(rr)].value, rr.norm() - Earth.R)
 We can also see how the J2 perturbation changes RAAN over time!
 
 ```{code-cell} ipython3
-r0 = np.array([-2384.46, 5729.01, 3050.46]) * u.km
-v0 = np.array([-7.36138, -2.98997, 1.64354]) * u.km / u.s
+r0 = np.array([-2384.46, 5729.01, 3050.46]) * u.au
+v0 = np.array([-7.36138, -2.98997, 1.64354]) * u.au / u.s
 
 orbit = Orbit.from_vectors(Earth, r0, v0)
 
@@ -149,7 +149,7 @@ tofs = TimeDelta(np.linspace(0, 48.0 * u.h, num=2000))
 def f(t0, state, k):
     du_kep = func_twobody(t0, state, k)
     ax, ay, az = J2_perturbation(
-        t0, state, k, J2=Earth.J2.value, R=Earth.R.to(u.km).value
+        t0, state, k, J2=Earth.J2.value, R=Earth.R.to(u.au).value
     )
     du_ad = np.array([0, 0, 0, ax, ay, az])
 
@@ -163,8 +163,8 @@ coords = propagate(
     f=f,
 )
 
-rr = coords.xyz.T.to(u.km).value
-vv = coords.differentials["s"].d_xyz.T.to(u.km / u.s).value
+rr = coords.xyz.T.to(u.au).value
+vv = coords.differentials["s"].d_xyz.T.to(u.au / u.s).value
 
 # This will be easier to compute when this is solved:
 # https://github.com/poliastro/poliastro/issues/380
@@ -196,7 +196,7 @@ body_r = build_ephem_interpolant(
 
 initial = Orbit.from_classical(
     Earth,
-    42164.0 * u.km,
+    42164.0 * u.au,
     0.0001 * u.one,
     1 * u.deg,
     0.0 * u.deg,
@@ -214,7 +214,7 @@ def f(t0, state, k):
         t0,
         state,
         k,
-        k_third=400 * Moon.k.to(u.km ** 3 / u.s ** 2).value,
+        k_third=400 * Moon.k.to(u.au ** 3 / u.s ** 2).value,
         perturbation_body=body_r,
     )
     du_ad = np.array([0, 0, 0, ax, ay, az])
@@ -253,10 +253,10 @@ inc_f = (20.0 * u.deg).to(u.rad).value  # rad
 argp = 0.0  # rad, the method is efficient for 0 and 180
 f = 2.4e-6  # km / s2
 
-k = Earth.k.to(u.km ** 3 / u.s ** 2).value
+k = Earth.k.to(u.au ** 3 / u.s ** 2).value
 s0 = Orbit.from_classical(
     Earth,
-    a * u.km,
+    a * u.au,
     ecc_0 * u.one,
     inc_0 * u.deg,
     0 * u.deg,
@@ -310,7 +310,7 @@ def a_d(t0, state, k, J2, R, C_D, A_over_m, H0, rho0):
 ```{code-cell} ipython3
 # propagation times of flight and orbit
 tofs = TimeDelta(np.linspace(0, 10 * u.day, num=10 * 500))
-orbit = Orbit.circular(Earth, 250 * u.km)  # recall orbit from drag example
+orbit = Orbit.circular(Earth, 250 * u.au)  # recall orbit from drag example
 
 
 def f(t0, state, k):

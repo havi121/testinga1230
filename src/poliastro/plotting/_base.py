@@ -29,7 +29,7 @@ class BaseOrbitPlotter:
         self._trajectories = []  # type: List[Trajectory]
         self._attractor = None
         self._plane = plane or Planes.EARTH_EQUATOR
-        self._attractor_radius = np.inf * u.km
+        self._attractor_radius = np.inf * u.au
 
     @property
     def trajectories(self):
@@ -69,7 +69,7 @@ class BaseOrbitPlotter:
             or [0 * u.m]
         )
         self._attractor_radius = max(
-            self._attractor.R.to(u.km), min_distance.to(u.km) * 0.15
+            self._attractor.R.to(u.au), min_distance.to(u.au) * 0.15
         )
 
         color = BODY_COLORS.get(self._attractor.name, "#999999")

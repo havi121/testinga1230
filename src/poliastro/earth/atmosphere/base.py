@@ -67,11 +67,11 @@ class COESA:
             Geopotential altitude.
 
         """
-        alt = alt.to_value(u.km)
-        r0 = r0.to_value(u.km)
+        alt = alt.to_value(u.au)
+        r0 = r0.to_value(u.au)
 
         z, h = _check_altitude_fast(alt, r0, geometric)
-        z, h = z * u.km, h * u.km
+        z, h = z * u.au, h * u.au
 
         # Assert in range
         if not self.zb_levels[0] <= z <= self.zb_levels[-1]:
@@ -97,7 +97,7 @@ class COESA:
             Index for the value.
 
         """
-        x = x.to(u.km).value
-        x_levels = (x_levels << u.km).value
+        x = x.to(u.au).value
+        x_levels = (x_levels << u.au).value
         i = _get_index_fast(x, x_levels)
         return i

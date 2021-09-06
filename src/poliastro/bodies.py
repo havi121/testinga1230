@@ -63,9 +63,9 @@ class Body(
         k,
         name,
         symbol=None,
-        R=0 * u.km,
-        R_polar=0 * u.km,
-        R_mean=0 * u.km,
+        R=0 * u.au,
+        R_polar=0 * u.au,
+        R_mean=0 * u.au,
         rotational_period=0.0 * u.day,
         J2=0.0 * u.one,
         J3=0.0 * u.one,
@@ -100,7 +100,7 @@ class Body(
         return self.__str__()
 
     @classmethod
-    @u.quantity_input(k=u.km ** 3 / u.s ** 2, R=u.km)
+    @u.quantity_input(k=u.au ** 3 / u.s ** 2, R=u.au)
     def from_parameters(cls, parent, k, name, symbol, R, **kwargs):
         return cls(parent, k, name, symbol, R, **kwargs)
 

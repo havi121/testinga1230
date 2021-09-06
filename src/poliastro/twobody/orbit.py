@@ -214,7 +214,7 @@ class Orbit:
     @cached_property
     def h_vec(self):
         """Specific angular momentum vector."""
-        h_vec = np.cross(self.r.to(u.km).value, self.v.to(u.km / u.s)) * u.km ** 2 / u.s
+        h_vec = np.cross(self.r.to(u.au).value, self.v.to(u.au / u.s)) * u.au ** 2 / u.s
         return h_vec
 
     @cached_property
@@ -236,8 +236,8 @@ class Orbit:
             delta_t_from_nu_fast(
                 self.nu.to_value(u.rad),
                 self.ecc.value,
-                self.attractor.k.to_value(u.km ** 3 / u.s ** 2),
-                self.r_p.to_value(u.km),
+                self.attractor.k.to_value(u.au ** 3 / u.s ** 2),
+                self.r_p.to_value(u.au),
             )
             * u.s
         )
@@ -458,15 +458,15 @@ class Orbit:
             )
             ss = cls.from_vectors(
                 Earth,
-                gcrs_cart.xyz.to(u.km),
-                gcrs_cart.differentials["s"].d_xyz.to(u.km / u.day),
+                gcrs_cart.xyz.to(u.au),
+                gcrs_cart.differentials["s"].d_xyz.to(u.au / u.day),
                 epoch,
             )
 
         else:
             # TODO: The attractor is not really the Sun, but the Solar System
             # Barycenter
-            ss = cls.from_vectors(Sun, r.xyz.to(u.km), v.xyz.to(u.km / u.day), epoch)
+            ss = cls.from_vectors(Sun, r.xyz.to(u.au), v.xyz.to(u.au / u.day), epoch)
             ss._frame = ICRS()  # Hack!
 
         return ss
@@ -1164,10 +1164,10 @@ class Orbit:
         return p_vec, q_vec, w_vec
 
     def __str__(self):
-        if self.a > 1e7 * u.km:
+        if self.a > 1e7 * u.au:
             unit = u.au
         else:
-            unit = u.km
+            unit = u.au
 
         try:
             return ORBIT_FORMAT.format(
@@ -1253,8 +1253,8 @@ class Orbit:
             delta_t_from_nu_fast(
                 nu.to_value(u.rad),
                 self.ecc.value,
-                self.attractor.k.to_value(u.km ** 3 / u.s ** 2),
-                self.r_p.to_value(u.km),
+                self.attractor.k.to_value(u.au ** 3 / u.s ** 2),
+                self.r_p.to_value(u.au),
             )
             * u.s
         )
@@ -1384,8 +1384,8 @@ class Orbit:
         )
 
         # Add units
-        rr = (rr << u.m).to(u.km)
-        vv = (vv << (u.m / u.s)).to(u.km / u.s)
+        rr = (rr << u.m).to(u.au)
+        vv = (vv << (u.m / u.s)).to(u.au / u.s)
 
         cartesian = CartesianRepresentation(
             rr, differentials=CartesianDifferential(vv, xyz_axis=1), xyz_axis=1

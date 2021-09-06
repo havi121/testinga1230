@@ -36,7 +36,7 @@ class Jacchia77:
             self.CM,
             self.WM,
         ) = (
-            Z * u.km,
+            Z * u.au,
             T * u.K,
             np.array(CN2) * 1e6 * (u.m) ** -3,
             np.array(CO2) * 1e6 * (u.m) ** -3,
@@ -84,7 +84,7 @@ class Jacchia77:
             [altitude(Z), T, N2, O2, O, Ar, He, H, Total number density, Mean Molecular weight]
         """
         # checking if the units entered are km
-        if alt.unit == u.km:
+        if alt.unit == u.au:
             if 150 <= alt.value < 500:
                 alt_properties = self._altitude_profile(500, Texo.value)
             else:
